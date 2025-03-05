@@ -2,9 +2,9 @@
 
 public interface IRepository<IEntity>
 {
-    Task Add(IEntity entity);
-    Task Update(IEntity entity);
-    Task<IEntity?> GetById(Guid id);
-    Task<List<IEntity>> GetAll();
-    Task Delete(IEntity entity);
+    Task AddAsync(IEntity entity);
+    Task UpdateAsync(IEntity entity);
+    Task<IEntity?> GetByIdAsync(Guid id);
+    Task<List<IEntity>> GetAllAsync();
+    Task DeleteAsync(IEntity entity);
 }

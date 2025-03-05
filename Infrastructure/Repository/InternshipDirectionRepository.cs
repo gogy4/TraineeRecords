@@ -6,43 +6,43 @@ namespace Infrastructure.Repository;
 
 public class InternshipDirectionRepository(AppDbContext context) : IInternshipDirectionRepository
 {
-    public async Task Add(InternshipDirection direction)
+    public async Task AddAsync(InternshipDirection direction)
     {
         await context.InternshipDirections.AddAsync(direction);
         await context.SaveChangesAsync();
     }
 
-    public async Task Update(InternshipDirection direction)
+    public async Task UpdateAsync(InternshipDirection direction)
     {
         context.Update(direction);
         await context.SaveChangesAsync();
     }
 
-    public async Task<InternshipDirection?> GetById(Guid id)
+    public async Task<InternshipDirection?> GetByIdAsync(Guid id)
     {
         return await context.InternshipDirections.FindAsync(id);
     }
 
-    public async Task<List<InternshipDirection>> GetAll()
+    public async Task<List<InternshipDirection>> GetAllAsync()
     {
         return await context.InternshipDirections.ToListAsync();
     }
 
-    public async Task<List<InternshipDirection>> GetByName(string name)
+    public async Task<List<InternshipDirection>> GetByNameAsync(string name)
     {
         return await context.InternshipDirections
-            .Where(p => p.Name == name)
+            .Where(p => p.Name.Contains(name))
             .ToListAsync();
     }
 
-    public async Task<List<InternshipDirection>> GetByTraineeCount(int traineeCount)
+    public async Task<List<InternshipDirection>> GetByTraineeCountAsync(int traineeCount)
     {
         return await context.InternshipDirections
             .Where(p => p.CountTrainees == traineeCount)
             .ToListAsync();
     }
 
-    public async Task Delete(InternshipDirection direction)
+    public async Task DeleteAsync(InternshipDirection direction)
     {
         context.Remove(direction);
         await context.SaveChangesAsync();

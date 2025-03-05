@@ -2,7 +2,7 @@
 
 public interface IInternshipDirectionRepository : IRepository<InternshipDirection>
 {
-    Task<List<InternshipDirection>> GetByName(string name);
-    Task<List<InternshipDirection>> GetByTraineeCount(int traineeCount);
+    Task<List<InternshipDirection>> GetByNameAsync(string name);
+    Task<List<InternshipDirection>> GetByTraineeCountAsync(int traineeCount);
 
 }
