@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Rider Projects\\Booking\\WebApplication1\\Infrastructure\\Infrastructure.csproj": {}
+    "D:\\Rider Projects\\WebApplication1\\Infrastructure\\Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\Domain.csproj": {
+    "D:\\Rider Projects\\WebApplication1\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\Domain.csproj",
+        "projectUniqueName": "D:\\Rider Projects\\WebApplication1\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\Domain.csproj",
+        "projectPath": "D:\\Rider Projects\\WebApplication1\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\dan4i\\.nuget\\packages\\",
-        "outputPath": "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\obj\\",
+        "outputPath": "D:\\Rider Projects\\WebApplication1\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dan4i\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -63,14 +63,14 @@
         }
       }
     },
-    "D:\\Rider Projects\\Booking\\WebApplication1\\Infrastructure\\Infrastructure.csproj": {
+    "D:\\Rider Projects\\WebApplication1\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Rider Projects\\Booking\\WebApplication1\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "D:\\Rider Projects\\WebApplication1\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "D:\\Rider Projects\\Booking\\WebApplication1\\Infrastructure\\Infrastructure.csproj",
+        "projectPath": "D:\\Rider Projects\\WebApplication1\\Infrastructure\\Infrastructure.csproj",
         "packagesPath": "C:\\Users\\dan4i\\.nuget\\packages\\",
-        "outputPath": "D:\\Rider Projects\\Booking\\WebApplication1\\Infrastructure\\obj\\",
+        "outputPath": "D:\\Rider Projects\\WebApplication1\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dan4i\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -85,8 +85,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\Domain.csproj": {
-                "projectPath": "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\Domain.csproj"
+              "D:\\Rider Projects\\WebApplication1\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\Rider Projects\\WebApplication1\\Domain\\Domain.csproj"
               }
             }
           }

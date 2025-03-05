@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Rider Projects\\Booking\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {}
+    "D:\\Rider Projects\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "D:\\Rider Projects\\Booking\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {
+    "D:\\Rider Projects\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Rider Projects\\Booking\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "D:\\Rider Projects\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "D:\\Rider Projects\\Booking\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+        "projectPath": "D:\\Rider Projects\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
         "packagesPath": "C:\\Users\\dan4i\\.nuget\\packages\\",
-        "outputPath": "D:\\Rider Projects\\Booking\\WebApplication1\\WebApplication1\\obj\\",
+        "outputPath": "D:\\Rider Projects\\WebApplication1\\WebApplication1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dan4i\\AppData\\Roaming\\NuGet\\NuGet.Config"

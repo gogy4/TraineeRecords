@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\Domain.csproj",
+      "projectUniqueName": "D:\\Rider Projects\\WebApplication1\\Domain\\Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\Domain.csproj",
+      "projectPath": "D:\\Rider Projects\\WebApplication1\\Domain\\Domain.csproj",
       "packagesPath": "C:\\Users\\dan4i\\.nuget\\packages\\",
-      "outputPath": "D:\\Rider Projects\\Booking\\WebApplication1\\Domain\\obj\\",
+      "outputPath": "D:\\Rider Projects\\WebApplication1\\Domain\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\dan4i\\AppData\\Roaming\\NuGet\\NuGet.Config"

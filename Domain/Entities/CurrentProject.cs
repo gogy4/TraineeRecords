@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class CurrentProject : Interface
+public class CurrentProject : IResource, IEntity
 {
     public Guid Id { get; private set; }
     public string Name { get; private set; }
