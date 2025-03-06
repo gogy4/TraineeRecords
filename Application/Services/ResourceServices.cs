@@ -7,14 +7,14 @@ public class ResourceServices(
     CurrentProjectServices currentProjectServices,
     InternshipDirectionsServices internshipDirectionsService)
 {
-    public async Task<(Guid currentProjectId, Guid internshipDirectionId)> GetIds(string internshipDirectionName,
+    public async Task ChangeCountTrainees(string internshipDirectionName,
         string currentProjectName)
     {
-        var project = await currentProjectServices.GetByName(currentProjectName);
-
+        var (internshipDirectionId, currentProjectId) = await GetIds(internshipDirectionName, currentProjectName);
+        var project = await currentProjectServices.GetById(currentProjectId);
         if (project is null)
         {
-            project = await currentProjectServices.Create(currentProjectName);
+            await currentProjectServices.Create(currentProjectName);
         }
         else
         {
@@ -22,19 +22,17 @@ public class ResourceServices(
             await currentProjectServices.Update(project);
         }
 
-        var direction = await internshipDirectionsService.GetByName(internshipDirectionName);
-
+        var direction = await internshipDirectionsService.GetById(internshipDirectionId);
         if (direction is null)
         {
-            direction = await internshipDirectionsService.Create(internshipDirectionName);
+            await internshipDirectionsService.Create(internshipDirectionName);
         }
         else
         {
             direction.IncrementTrainees();
             await internshipDirectionsService.Update(direction);
         }
-
-        return (project.Id, direction.Id);
+ 
     }
 
     public async Task<(List<string> internShipDirectionNames, List<string> currentProjectNames)> GetNameResources()
@@ -57,5 +55,14 @@ public class ResourceServices(
     public async Task CreateCurrentProject(string projectName)
     {
         await currentProjectServices.Create(projectName);
+    }
+
+    public async Task<(Guid currentProjectId, Guid internshipDirectionId)> GetIds(string internshipDirectionName, string currentProjectName)
+    {
+        var project = await currentProjectServices.GetByName(currentProjectName);
+        var internshipDirection = await internshipDirectionsService.GetByName(internshipDirectionName);
+        var projectId = project is null ? Guid.Empty : project.Id;
+        var internshipDirectionId = internshipDirection is null ? Guid.Empty : internshipDirection.Id;
+        return (projectId, internshipDirectionId);
     }
 }

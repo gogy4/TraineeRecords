@@ -22,6 +22,11 @@ public class InternshipDirectionsServices(IInternshipDirectionRepository reposit
         return await repository.GetByNameAsync(filter);
     }
     
+    public async Task<InternshipDirection> GetById(Guid id)
+    {
+        return await repository.GetByIdAsync(id);
+    }
+    
     public async Task Update(InternshipDirection direction)
     {
         await repository.UpdateAsync(direction);

@@ -16,6 +16,11 @@ public class CurrentProjectServices(ICurrentProjectRepository repository)
         return (await repository.GetByNameAsync(name)).FirstOrDefault();
     }
 
+    public async Task<CurrentProject> GetById(Guid id)
+    {
+        return await repository.GetByIdAsync(id);
+    }
+
     public async Task<List<CurrentProject>> GetByFilter(string filter)
     {
         if (filter is null || filter.Split().Length == 0) return await GetAll();

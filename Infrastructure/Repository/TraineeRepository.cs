@@ -33,6 +33,14 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
         return await context.Trainees.FirstOrDefaultAsync(t => t.Email == email);
     }
 
+    public async Task<List<Trainee>> GetByResourcesName(Guid internshipDirectionId, Guid currentProjectId)
+    {
+        return await context.Trainees
+            .Where(t => (currentProjectId == Guid.Empty || t.CurrentProjectId == currentProjectId)
+                        && (internshipDirectionId == Guid.Empty || t.InternshipDirectionId == internshipDirectionId))
+            .ToListAsync();
+    }
+
     public async Task<List<Trainee>> GetAllAsync()
     {
         return await context.Trainees.ToListAsync();

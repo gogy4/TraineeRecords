@@ -12,11 +12,17 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         var result = await validator.ValidateAsync(traineeDto);
         if (!result.IsValid)
             throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
-        var ids = await resourceServices
-            .GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
+        var ids = await resourceServices.GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
+        await resourceServices.ChangeCountTrainees(traineeDto.InternshipDirection, traineeDto.CurrentProject);
         var trainee = new Trainee(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email,
             traineeDto.PhoneNumber, traineeDto.DateOfBirth, ids.internshipDirectionId, ids.currentProjectId);
         await repository.AddAsync(trainee);
+    }
+
+    public async Task<List<Trainee>> GetByFilter(string directionFilter, string currentProjectId)
+    {
+        var (projectId, directionId) = await resourceServices.GetIds(directionFilter, currentProjectId);
+        return await repository.GetByResourcesName(directionId, projectId);
     }
 
     public async Task<Trainee> GetById(Guid traineeId)
@@ -32,5 +38,10 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
     public async Task<bool> EmailHaveNot(string email)
     {
         return await repository.GetByEmailAsync(email) is null;
+    }
+
+    public async Task<List<Trainee>> GetAll()
+    {
+        return await repository.GetAllAsync();
     }
 }
