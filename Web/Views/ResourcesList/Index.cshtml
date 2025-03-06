@@ -1,0 +1,143 @@
+﻿@model WebApplication1.Models.ResourcesListViewModel
+
+@{
+    ViewData["Title"] = "Список направлений и проектов";
+}
+
+<h2>Список направлений и проектов</h2>
+
+<form method="get" asp-action="FilterAndSort" id="searchForm">
+    <input type="text" name="searchQuery" placeholder="Поиск..." value="@Context.Request.Query["searchQuery"]"/>
+    <select name="sortOrder">
+        <option value="name" selected="@(Context.Request.Query["sortOrder"] == "name" ? "selected" : null)">По
+            названию
+        </option>
+        <option value="trainees" selected="@(Context.Request.Query["sortOrder"] == "trainees" ? "selected" : null)">По
+            количеству стажеров
+        </option>
+    </select>
+    <input type="hidden" name="activeTab" id="activeTab" value="@ViewBag.ActiveTab"/>
+    <button type="submit">🔍 Найти</button>
+</form>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "projects" ? "active" : "")" id="projects-tab"
+           data-toggle="tab" href="#projects">Проекты</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "directions" ? "active" : "")" id="directions-tab"
+           data-toggle="tab" href="#directions">Направления</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade @(ViewBag.ActiveTab == "projects" ? "show active" : "")" id="projects">
+        <h3>Проекты</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    <a href="#" class="sort-link" data-sort="name">Название 🔼</a>
+                </th>
+                <th>
+                    <a href="#" class="sort-link" data-sort="trainees">Кол-во стажеров 🔼</a>
+                </th>
+                <th>Стажеры</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var project in Model.Projects)
+            {
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.CountTrainees</td>
+                    <td>
+                        <button class="toggle-trainees btn btn-info" data-id="@project.Id">👥 Показать</button>
+                        <ul class="trainees-list" id="trainees-@project.Id" style="display:none;">
+
+                        </ul>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-pane fade @(ViewBag.ActiveTab == "directions" ? "show active" : "")" id="directions">
+        <h3>Направления</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    <a href="#" class="sort-link" data-sort="name">Название 🔼</a>
+                </th>
+                <th>
+                    <a href="#" class="sort-link" data-sort="trainees">Кол-во стажеров 🔼</a>
+                </th>
+                <th>Стажеры</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var direction in Model.Directions)
+            {
+                <tr>
+                    <td>@direction.Name</td>
+                    <td>@direction.CountTrainees</td>
+                    <td>
+                        <button class="toggle-trainees btn btn-info" data-id="@direction.Id">👥 Показать</button>
+                        <ul class="trainees-list" id="trainees-@direction.Id" style="display:none;">
+
+                        </ul>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<form method="get" asp-action="Paginate" id="paginationForm">
+    <input type="hidden" name="activeTab" id="activeTabPagination" value="@ViewBag.ActiveTab"/>
+    <label>Размер страницы:
+        <select name="pageSize" onchange="document.getElementById('paginationForm').submit();">
+            <option value="5" selected="@(Context.Request.Query["pageSize"] == "5" ? "selected" : null)">5</option>
+            <option value="10" selected="@(Context.Request.Query["pageSize"] == "10" ? "selected" : null)">10</option>
+            <option value="20" selected="@(Context.Request.Query["pageSize"] == "20" ? "selected" : null)">20</option>
+        </select>
+    </label>
+    <label>Страница:
+        <input type="number" name="page" value="@Model.CurrentPage" min="1"
+               onchange="document.getElementById('paginationForm').submit();"/>
+    </label>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.nav-link').forEach(tab => {
+            tab.addEventListener("click", function () {
+                let activeTab = this.getAttribute("href").substring(1);
+                document.getElementById("activeTab").value = activeTab;
+                document.getElementById("activeTabPagination").value = activeTab;
+                localStorage.setItem("activeTab", activeTab);
+            });
+        });
+
+        let savedTab = localStorage.getItem("activeTab") || "projects";
+        document.getElementById("activeTab").value = savedTab;
+        document.getElementById("activeTabPagination").value = savedTab;
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.nav-link').forEach(tab => {
+            tab.addEventListener("click", function (event) {
+                event.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(t => t.classList.remove("active"));
+                document.querySelectorAll('.tab-pane').forEach(content => content.classList.remove("show", "active"));
+                this.classList.add("active");
+                let target = this.getAttribute("href");
+                document.querySelector(target).classList.add("show", "active");
+            });
+        });
+    });
+</script>

@@ -49,15 +49,13 @@ public class ResourceServices(
         return (internShipDirectionNames, currentProjectNames);
     }
 
-    public async Task<InternshipDirection> CreateInternshipDirection(string internshipDirectionName)
+    public async Task CreateInternshipDirection(string internshipDirectionName)
     {
-        var internshipDirection = await internshipDirectionsService.Create(internshipDirectionName);
-        return internshipDirection;
+        await internshipDirectionsService.Create(internshipDirectionName);
     }
 
-    public async Task<CurrentProject> CreateCurrentProject(string projectName)
+    public async Task CreateCurrentProject(string projectName)
     {
-        var project = await currentProjectServices.Create(projectName);
-        return project;
+        await currentProjectServices.Create(projectName);
     }
 }

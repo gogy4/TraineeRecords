@@ -16,6 +16,12 @@ public class InternshipDirectionsServices(IInternshipDirectionRepository reposit
         return (await repository.GetByNameAsync(name)).FirstOrDefault();
     }
     
+    public async Task<List<InternshipDirection>> GetByFilter(string filter)
+    {
+        if (filter is null || filter.Split().Length == 0) return await GetAll();
+        return await repository.GetByNameAsync(filter);
+    }
+    
     public async Task Update(InternshipDirection direction)
     {
         await repository.UpdateAsync(direction);
