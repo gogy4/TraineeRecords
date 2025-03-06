@@ -1,7 +1,17 @@
-﻿@model Application.Dto.CreateTraineeDto
+﻿@model CreateTraineeViewModel
 
 @{
     ViewData["Title"] = "Создать нового стажера";
+}
+
+@if (!string.IsNullOrEmpty(Model.Success))
+{
+    <div class="alert alert-success">@Model.Success</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.Errors))
+{
+    <div class="alert alert-danger">@Model.Errors</div>
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -47,7 +57,7 @@
         <label for="internshipDirection">Направление стажировки:</label>
         <select id="internshipDirection" name="InternshipDirection" required>
             <option value="">Выберите направление</option>
-            @foreach (var direction in ViewBag.InternshipDirections as List<string>)
+            @foreach (var direction in Model.InternshipDirections)
             {
                 <option value="@direction">@direction</option>
             }
@@ -60,7 +70,7 @@
         <label for="currentProject">Текущий проект:</label>
         <select id="currentProject" name="CurrentProject" required>
             <option value="">Выберите проект</option>
-            @foreach (var project in ViewBag.Projects as List<string>)
+            @foreach (var project in Model.Projects)
             {
                 <option value="@project">@project</option>
             }
@@ -71,6 +81,7 @@
 
     <button type="submit">Создать стажера</button>
 </form>
+
 
 <script>
     async function postData(url, data) {

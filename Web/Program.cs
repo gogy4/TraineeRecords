@@ -3,6 +3,7 @@ using Domain.Entities;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using Application.DtoValidator;
 using Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);

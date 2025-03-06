@@ -1,16 +1,22 @@
-﻿using Domain.Entities;
+﻿using Application.Dto;
+using Application.DtoValidator;
+using Domain.Entities;
 
 namespace Application.Services;
 
-public class TraineeServices(ITraineeRepository repository)
+public class TraineeServices(ITraineeRepository repository, ResourceServices resourceServices)
 {
-    public async Task<Trainee> Create(string name, string surname, string gender, string email, string phoneNumber,
-        DateTime dateOfBirth, Guid internshipDirectionId, Guid currentProjectId)
+    public async Task Create(CreateTraineeDto traineeDto)
     {
-        var trainee = new Trainee(name, surname, gender, email, phoneNumber, dateOfBirth, internshipDirectionId,
-            currentProjectId);
+        var validator = new TraineeCreateValidator(this);
+        var result = await validator.ValidateAsync(traineeDto);
+        if (!result.IsValid)
+            throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
+        var ids = await resourceServices
+            .GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
+        var trainee = new Trainee(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email,
+            traineeDto.PhoneNumber, traineeDto.DateOfBirth, ids.internshipDirectionId, ids.currentProjectId);
         await repository.AddAsync(trainee);
-        return trainee;
     }
 
     public async Task<Trainee> GetById(Guid traineeId)
@@ -18,13 +24,13 @@ public class TraineeServices(ITraineeRepository repository)
         return await repository.GetByIdAsync(traineeId);
     }
 
-    public async Task<Trainee?> GetByPhoneNumber(string phoneNumber)
+    public async Task<bool> PhoneNumberHaveNotUsed(string phoneNumber)
     {
-        return await repository.GetByPhoneNumberAsync(phoneNumber);
+        return await repository.GetByPhoneNumberAsync(phoneNumber) is null;
     }
 
-    public async Task<Trainee?> GetByEmail(string email)
+    public async Task<bool> EmailHaveNot(string email)
     {
-        return await repository.GetByEmailAsync(email);
+        return await repository.GetByEmailAsync(email) is null;
     }
 }

@@ -8,7 +8,7 @@ public class Trainee : IEntity
     public string Surname { get; private set; }
     public string Gender { get; private set; }
     public string Email { get; private set; }
-    public string PhoneNumber { get; private set; }
+    public string? PhoneNumber { get; private set; }
     public DateTime? DateOfBirth { get; private set; }
     public Guid? InternshipDirectionId { get; private set; }
     public Guid? CurrentProjectId { get; private set; }
