@@ -12,6 +12,10 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
         await context.SaveChangesAsync();
     }
 
+    public async Task<Trainee?> GetByPhoneNumberAsync(string phoneNumber)
+    {
+        return await context.Trainees.FirstOrDefaultAsync(t => t.PhoneNumber == phoneNumber);
+    }
 
     public async Task UpdateAsync(Trainee trainee)
     {
@@ -22,6 +26,11 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
     public async Task<Trainee?> GetByIdAsync(Guid id)
     {
         return await context.Trainees.FindAsync(id);
+    }
+
+    public async Task<Trainee?> GetByEmailAsync(string email)
+    {
+        return await context.Trainees.FirstOrDefaultAsync(t => t.Email == email);
     }
 
     public async Task<List<Trainee>> GetAllAsync()
@@ -42,6 +51,8 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
             .Where(t => t.InternshipDirectionId == directionId)
             .ToListAsync();
     }
+
+   
 
     public async Task DeleteAsync(Trainee trainee)
     {

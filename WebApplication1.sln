@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{38B8D269-E8CE-4E5C-B564-0580979A832E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraineeRecords", "TraineeRecords\TraineeRecords.csproj", "{D6D2E2A6-DCC7-4F43-8955-EB77D6CB3BD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{D6D2E2A6-DCC7-4F43-8955-EB77D6CB3BD6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{51DC6D6B-048C-4640-AE41-1E2B0F86BDB5}"
 EndProject

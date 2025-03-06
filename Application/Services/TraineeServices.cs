@@ -12,4 +12,19 @@ public class TraineeServices(ITraineeRepository repository)
         await repository.AddAsync(trainee);
         return trainee;
     }
+
+    public async Task<Trainee> GetById(Guid traineeId)
+    {
+        return await repository.GetByIdAsync(traineeId);
+    }
+
+    public async Task<Trainee?> GetByPhoneNumber(string phoneNumber)
+    {
+        return await repository.GetByPhoneNumberAsync(phoneNumber);
+    }
+
+    public async Task<Trainee?> GetByEmail(string email)
+    {
+        return await repository.GetByEmailAsync(email);
+    }
 }

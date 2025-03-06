@@ -1,0 +1,122 @@
+﻿@model Application.Dto.CreateTraineeDto
+
+@{
+    ViewData["Title"] = "Создать нового стажера";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form id="traineeForm" method="post" asp-action="CreateTrainee">
+    @Html.AntiForgeryToken()
+
+    <div>
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="Name" required />
+    </div>
+
+    <div>
+        <label for="surname">Фамилия:</label>
+        <input type="text" id="surname" name="Surname" required />
+    </div>
+
+    <div>
+        <label for="gender">Пол:</label>
+        <select id="gender" name="Gender" required>
+            <option value="">Выберите пол</option>
+            <option value="Мужской">Мужской</option>
+            <option value="Женский">Женский</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="Email" required />
+    </div>
+
+    <div>
+        <label for="phoneNumber">Номер телефона:</label>
+        <input type="text" id="phoneNumber" name="PhoneNumber" placeholder="+7XXXXXXXXXX" />
+    </div>
+
+    <div>
+        <label for="dateOfBirth">Дата рождения:</label>
+        <input type="date" id="dateOfBirth" name="DateOfBirth" required />
+    </div>
+
+    <div>
+        <label for="internshipDirection">Направление стажировки:</label>
+        <select id="internshipDirection" name="InternshipDirection" required>
+            <option value="">Выберите направление</option>
+            @foreach (var direction in ViewBag.InternshipDirections as List<string>)
+            {
+                <option value="@direction">@direction</option>
+            }
+        </select>
+        <input type="text" id="newInternshipDirection" placeholder="Добавить новое направление" />
+        <button type="button" id="addInternshipDirection">+</button>
+    </div>
+
+    <div>
+        <label for="currentProject">Текущий проект:</label>
+        <select id="currentProject" name="CurrentProject" required>
+            <option value="">Выберите проект</option>
+            @foreach (var project in ViewBag.Projects as List<string>)
+            {
+                <option value="@project">@project</option>
+            }
+        </select>
+        <input type="text" id="newCurrentProject" placeholder="Добавить новый проект" />
+        <button type="button" id="addCurrentProject">+</button>
+    </div>
+
+    <button type="submit">Создать стажера</button>
+</form>
+
+<script>
+    async function postData(url, data) {
+        try {
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) throw new Error("Ошибка при отправке данных");
+            return response;
+        } catch (error) {
+            console.error("Ошибка сети:", error);
+        }
+    }
+
+    document.getElementById("addInternshipDirection").addEventListener("click", async function() {
+        var newDirection = document.getElementById("newInternshipDirection").value.trim();
+        if (newDirection) {
+            let response = await postData('/CreateTrainee/AddInternshipDirection', newDirection);
+            if (response) {
+                var select = document.getElementById("internshipDirection");
+                var option = document.createElement("option");
+                option.value = newDirection;
+                option.textContent = newDirection;
+                select.appendChild(option);
+                select.value = newDirection;
+                document.getElementById("newInternshipDirection").value = "";
+            }
+        }
+    });
+
+    document.getElementById("addCurrentProject").addEventListener("click", async function() {
+        var newProject = document.getElementById("newCurrentProject").value.trim();
+        if (newProject) {
+            let response = await postData('/CreateTrainee/AddCurrentProject', newProject);
+            if (response) {
+                var select = document.getElementById("currentProject");
+                var option = document.createElement("option");
+                option.value = newProject;
+                option.textContent = newProject;
+                select.appendChild(option);
+                select.value = newProject;
+                document.getElementById("newCurrentProject").value = "";
+            }
+        }
+    });
+</script>
