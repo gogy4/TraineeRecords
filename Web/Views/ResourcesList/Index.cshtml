@@ -7,27 +7,21 @@
 <h2>Список направлений и проектов</h2>
 
 <form method="get" asp-action="FilterAndSort" id="searchForm">
-    <input type="text" name="searchQuery" placeholder="Поиск..." value="@Context.Request.Query["searchQuery"]"/>
+    <input type="text" name="searchQuery" placeholder="Поиск..." value="@ViewBag.SearchQuery" />
     <select name="sortOrder">
-        <option value="name" selected="@(Context.Request.Query["sortOrder"] == "name" ? "selected" : null)">По
-            названию
-        </option>
-        <option value="trainees" selected="@(Context.Request.Query["sortOrder"] == "trainees" ? "selected" : null)">По
-            количеству стажеров
-        </option>
+        <option value="name" selected="@(ViewBag.SortOrder == "name" ? "selected" : null)">По названию</option>
+        <option value="trainees" selected="@(ViewBag.SortOrder == "trainees" ? "selected" : null)">По количеству стажеров</option>
     </select>
-    <input type="hidden" name="activeTab" id="activeTab" value="@ViewBag.ActiveTab"/>
+    <input type="hidden" name="activeTab" id="activeTab" value="@ViewBag.ActiveTab" />
     <button type="submit">🔍 Найти</button>
 </form>
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link @(ViewBag.ActiveTab == "projects" ? "active" : "")" id="projects-tab"
-           data-toggle="tab" href="#projects">Проекты</a>
+        <a class="nav-link @(ViewBag.ActiveTab == "projects" ? "active" : "")" id="projects-tab" data-toggle="tab" href="#projects">Проекты</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @(ViewBag.ActiveTab == "directions" ? "active" : "")" id="directions-tab"
-           data-toggle="tab" href="#directions">Направления</a>
+        <a class="nav-link @(ViewBag.ActiveTab == "directions" ? "active" : "")" id="directions-tab" data-toggle="tab" href="#directions">Направления</a>
     </li>
 </ul>
 
@@ -54,9 +48,7 @@
                     <td>@project.CountTrainees</td>
                     <td>
                         <button class="toggle-trainees btn btn-info" data-id="@project.Id">👥 Показать</button>
-                        <ul class="trainees-list" id="trainees-@project.Id" style="display:none;">
-
-                        </ul>
+                        <ul class="trainees-list" id="trainees-@project.Id" style="display:none;"></ul>
                     </td>
                 </tr>
             }
@@ -86,9 +78,7 @@
                     <td>@direction.CountTrainees</td>
                     <td>
                         <button class="toggle-trainees btn btn-info" data-id="@direction.Id">👥 Показать</button>
-                        <ul class="trainees-list" id="trainees-@direction.Id" style="display:none;">
-
-                        </ul>
+                        <ul class="trainees-list" id="trainees-@direction.Id" style="display:none;"></ul>
                     </td>
                 </tr>
             }
@@ -99,45 +89,80 @@
 
 <form method="get" asp-action="Paginate" id="paginationForm">
     <input type="hidden" name="activeTab" id="activeTabPagination" value="@ViewBag.ActiveTab"/>
+    <input type="hidden" name="searchQuery" value="@ViewBag.SearchQuery"/>
+    <input type="hidden" name="sortOrder" value="@ViewBag.SortOrder"/>
+    <input type="hidden" name="page" id="currentPage" value="@Model.CurrentPage" />
+
     <label>Размер страницы:
         <select name="pageSize" onchange="document.getElementById('paginationForm').submit();">
-            <option value="5" selected="@(Context.Request.Query["pageSize"] == "5" ? "selected" : null)">5</option>
-            <option value="10" selected="@(Context.Request.Query["pageSize"] == "10" ? "selected" : null)">10</option>
-            <option value="20" selected="@(Context.Request.Query["pageSize"] == "20" ? "selected" : null)">20</option>
+            <option value="5" selected="@(ViewBag.PageSize == 5 ? "selected" : null)">5</option>
+            <option value="10" selected="@(ViewBag.PageSize == 10 ? "selected" : null)">10</option>
+            <option value="20" selected="@(ViewBag.PageSize == 20 ? "selected" : null)">20</option>
         </select>
     </label>
-    <label>Страница:
-        <input type="number" name="page" value="@Model.CurrentPage" min="1"
-               onchange="document.getElementById('paginationForm').submit();"/>
-    </label>
+
+    <div class="pagination-buttons">
+        <button type="submit" name="page" value="1" class="btn btn-primary" @(Model.CurrentPage == 1 ? "disabled" : "")>Первая страница</button>
+        <button type="submit" name="page" value="@(@Model.CurrentPage - 1)" class="btn btn-primary" @(Model.CurrentPage == 1 ? "disabled" : "")>Назад</button>
+        <button type="submit" name="page" value="@(@Model.CurrentPage + 1)" class="btn btn-primary" @(Model.CurrentPage == ViewBag.TotalPagesProjects ? "disabled" : "")>Вперёд</button>
+        <button type="submit" name="page" value="@ViewBag.TotalPagesProjects" class="btn btn-primary" @(Model.CurrentPage == ViewBag.TotalPagesProjects ? "disabled" : "")>Последняя страница</button>
+    </div>
 </form>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll('.nav-link').forEach(tab => {
-            tab.addEventListener("click", function () {
-                let activeTab = this.getAttribute("href").substring(1);
-                document.getElementById("activeTab").value = activeTab;
-                document.getElementById("activeTabPagination").value = activeTab;
-                localStorage.setItem("activeTab", activeTab);
+    <script>
+        $(document).ready(function () {
+            $('.sort-link').click(function (e) {
+                e.preventDefault();
+                var sortOrder = $(this).data('sort');
+                var activeTab = $('#activeTab').val();
+                var searchQuery = $('input[name="searchQuery"]').val();
+                $('#paginationForm').submit();
+            });
+
+            $('a[data-toggle="tab"]').click(function () {
+                var activeTab = $(this).attr('href').substring(1);
+                $('#activeTab').val(activeTab);
+                $('#searchForm').submit();
+            });
+
+            $('.toggle-trainees').click(function () {
+                var id = $(this).data('id');
+                var list = $('#trainees-' + id);
+
+                if (list.is(':visible')) {
+                    list.hide();
+                } else {
+                    if (list.children().length === 0) {
+                        $.ajax({
+                            url: '/ResourcesList/GetTrainees',
+                            type: 'GET',
+                            data: { id: id },
+                            success: function (trainees) {
+                                list.empty();
+                                trainees.forEach(function (trainee) {
+                                    list.append('<li>' + trainee.Name + '</li>');
+                                });
+                            }
+                        });
+                    }
+                    list.show();
+                }
+            });
+
+            $('select[name="pageSize"]').change(function () {
+                $('#paginationForm').submit();
+            });
+
+            $('.pagination-buttons button').click(function () {
+                var page = $(this).val();
+                var activeTab = $('#activeTabPagination').val();
+                var searchQuery = $('input[name="searchQuery"]').val();
+                var sortOrder = $('input[name="sortOrder"]').val();
+                $('#currentPage').val(page);
+                $('#paginationForm').submit();
             });
         });
-
-        let savedTab = localStorage.getItem("activeTab") || "projects";
-        document.getElementById("activeTab").value = savedTab;
-        document.getElementById("activeTabPagination").value = savedTab;
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll('.nav-link').forEach(tab => {
-            tab.addEventListener("click", function (event) {
-                event.preventDefault();
-                document.querySelectorAll('.nav-link').forEach(t => t.classList.remove("active"));
-                document.querySelectorAll('.tab-pane').forEach(content => content.classList.remove("show", "active"));
-                this.classList.add("active");
-                let target = this.getAttribute("href");
-                document.querySelector(target).classList.add("show", "active");
-            });
-        });
-    });
-</script>
+    </script>
+}

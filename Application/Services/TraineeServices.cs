@@ -22,7 +22,6 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         await repository.AddAsync(trainee);
     }
 
-    
 
     public async Task Edit(TraineeDto traineeDto)
     {
@@ -34,15 +33,13 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         var oldIds = (trainee.CurrentProjectId, trainee.InternshipDirectionId);
         var newIds = await resourceServices.GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
         if (oldIds != newIds)
-        {
-            await resourceServices.ChangeCountTrainees(
-                oldIds.Item2, oldIds.Item1, newIds.internshipDirectionId, newIds.currentProjectId
-            );
-        }
-        
+            await resourceServices.ChangeCountTrainees(oldIds.Item2,
+                oldIds.Item1, newIds.internshipDirectionId, newIds.currentProjectId);
+
+
         trainee.Edit(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email, traineeDto.PhoneNumber,
             traineeDto.DateOfBirth, newIds.internshipDirectionId, newIds.currentProjectId);
-        
+
         await repository.UpdateAsync(trainee);
     }
 
