@@ -7,33 +7,50 @@ public class ResourceServices(
     CurrentProjectServices currentProjectServices,
     InternshipDirectionsServices internshipDirectionsService)
 {
-    public async Task ChangeCountTrainees(string internshipDirectionName,
-        string currentProjectName)
+    public async Task ChangeCountTrainees(Guid? oldInternshipDirectionId, Guid? oldCurrentProjectId,
+        Guid? newInternshipDirectionId, Guid? newCurrentProjectId)
     {
-        var (internshipDirectionId, currentProjectId) = await GetIds(internshipDirectionName, currentProjectName);
-        var project = await currentProjectServices.GetById(currentProjectId);
-        if (project is null)
+        if (oldCurrentProjectId.HasValue && oldCurrentProjectId != newCurrentProjectId)
         {
-            await currentProjectServices.Create(currentProjectName);
-        }
-        else
-        {
-            project.IncrementTrainees();
-            await currentProjectServices.Update(project);
+            var oldProject = await currentProjectServices.GetById(oldCurrentProjectId.Value);
+            if (oldProject != null)
+            {
+                oldProject.DecreaseTraineeCount();
+                await currentProjectServices.Update(oldProject);
+            }
         }
 
-        var direction = await internshipDirectionsService.GetById(internshipDirectionId);
-        if (direction is null)
+        if (oldInternshipDirectionId.HasValue && oldInternshipDirectionId != newInternshipDirectionId)
         {
-            await internshipDirectionsService.Create(internshipDirectionName);
+            var oldDirection = await internshipDirectionsService.GetById(oldInternshipDirectionId.Value);
+            if (oldDirection != null)
+            {
+                oldDirection.DecreaseTraineeCount();
+                await internshipDirectionsService.Update(oldDirection);
+            }
         }
-        else
+
+        if (newCurrentProjectId.HasValue && oldCurrentProjectId != newCurrentProjectId)
         {
-            direction.IncrementTrainees();
-            await internshipDirectionsService.Update(direction);
+            var newProject = await currentProjectServices.GetById(newCurrentProjectId.Value);
+            if (newProject != null)
+            {
+                newProject.IncreaseTraineeCount();
+                await currentProjectServices.Update(newProject);
+            }
         }
- 
+
+        if (newInternshipDirectionId.HasValue && oldInternshipDirectionId != newInternshipDirectionId)
+        {
+            var newDirection = await internshipDirectionsService.GetById(newInternshipDirectionId.Value);
+            if (newDirection != null)
+            {
+                newDirection.IncreaseTraineeCount();
+                await internshipDirectionsService.Update(newDirection);
+            }
+        }
     }
+
 
     public async Task<(List<string> internShipDirectionNames, List<string> currentProjectNames)> GetNameResources()
     {
@@ -43,7 +60,7 @@ public class ResourceServices(
         var currentProjectNames = (await currentProjectServices.GetAll())
             .Select(p => p.Name)
             .ToList();
-        
+
         return (internShipDirectionNames, currentProjectNames);
     }
 
@@ -57,7 +74,8 @@ public class ResourceServices(
         await currentProjectServices.Create(projectName);
     }
 
-    public async Task<(Guid currentProjectId, Guid internshipDirectionId)> GetIds(string internshipDirectionName, string currentProjectName)
+    public async Task<(Guid currentProjectId, Guid internshipDirectionId)> GetIds(string internshipDirectionName,
+        string currentProjectName)
     {
         var project = await currentProjectServices.GetByName(currentProjectName);
         var internshipDirection = await internshipDirectionsService.GetByName(internshipDirectionName);

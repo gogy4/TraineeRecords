@@ -12,12 +12,16 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         var result = await validator.ValidateAsync(traineeDto);
         if (!result.IsValid)
             throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
+
         var ids = await resourceServices.GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
-        await resourceServices.ChangeCountTrainees(traineeDto.InternshipDirection, traineeDto.CurrentProject);
+        await resourceServices.ChangeCountTrainees(null, null, ids.internshipDirectionId, ids.currentProjectId);
+
         var trainee = new Trainee(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email,
             traineeDto.PhoneNumber, traineeDto.DateOfBirth, ids.internshipDirectionId, ids.currentProjectId);
+
         await repository.AddAsync(trainee);
     }
+
     
 
     public async Task Edit(TraineeDto traineeDto)
@@ -27,10 +31,17 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         if (!result.IsValid)
             throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
         var trainee = await GetById(traineeDto.Id);
-        var ids = await resourceServices.GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
-
+        var oldIds = (trainee.CurrentProjectId, trainee.InternshipDirectionId);
+        var newIds = await resourceServices.GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
+        if (oldIds != newIds)
+        {
+            await resourceServices.ChangeCountTrainees(
+                oldIds.Item2, oldIds.Item1, newIds.internshipDirectionId, newIds.currentProjectId
+            );
+        }
+        
         trainee.Edit(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email, traineeDto.PhoneNumber,
-            traineeDto.DateOfBirth, ids.internshipDirectionId, ids.currentProjectId);
+            traineeDto.DateOfBirth, newIds.internshipDirectionId, newIds.currentProjectId);
         
         await repository.UpdateAsync(trainee);
     }

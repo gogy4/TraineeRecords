@@ -6,5 +6,6 @@ public interface IResource
     public string Name { get;  }
     public int CountTrainees { get; }
 
-    public void IncrementTrainees();
+    public void IncreaseTraineeCount();
+    public void DecreaseTraineeCount();
 }

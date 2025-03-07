@@ -1,62 +1,128 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model Application.Dto.TraineeDto
+@model EditTraineeViewModel
+
+@if (!string.IsNullOrEmpty(Model.Success))
+{
+    <div class="alert alert-success">@Model.Success</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.Errors))
+{
+    <div class="alert alert-danger">@Model.Errors</div>
+}
 
 <h2>Редактировать информацию о стажере</h2>
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["Success"]
-    </div>
-}
-
-@if (TempData["Errors"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["Errors"]
-    </div>
-}
-<form asp-action="Edit" method="post">
+<form asp-controller="TraineeRedactor" asp-action="Edit" method="post">
     <div class="form-group">
         <label for="Name">Имя</label>
-        <input asp-for="Name" class="form-control" id="Name" />
+        <input asp-for="Trainee.Name" class="form-control" id="Name" />
     </div>
 
     <div class="form-group">
         <label for="Surname">Фамилия</label>
-        <input asp-for="Surname" class="form-control" id="Surname" />
+        <input asp-for="Trainee.Surname" class="form-control" id="Surname" />
     </div>
 
     <div class="form-group">
-        <label for="Gender">Пол</label>
-        <input asp-for="Gender" class="form-control" id="Gender" />
+        <label for="gender">Пол</label>
+        <select asp-for="Trainee.Gender" id="gender" class="form-control">
+            <option value="">Выберите пол</option>
+            <option value="Мужской">Мужской</option>
+            <option value="Женский">Женский</option>
+        </select>
     </div>
 
     <div class="form-group">
         <label for="Email">Email</label>
-        <input asp-for="Email" class="form-control" id="Email" />
+        <input asp-for="Trainee.Email" class="form-control" id="Email" />
     </div>
 
     <div class="form-group">
         <label for="PhoneNumber">Номер телефона</label>
-        <input asp-for="PhoneNumber" class="form-control" id="PhoneNumber" />
+        <input asp-for="Trainee.PhoneNumber" class="form-control" id="PhoneNumber" />
     </div>
 
     <div class="form-group">
         <label for="DateOfBirth">Дата рождения</label>
-        <input asp-for="DateOfBirth" class="form-control" id="DateOfBirth" type="date" />
+        <input asp-for="Trainee.DateOfBirth" class="form-control" id="DateOfBirth" type="date" />
     </div>
 
     <div class="form-group">
-        <label for="InternshipDirectionId">Направление стажировки</label>
-        <input asp-for="InternshipDirection" class="form-control" id="InternshipDirectionId" />
+        <label for="internshipDirection">Направление стажировки</label>
+        <select asp-for="Trainee.InternshipDirection" id="internshipDirection" class="form-control">
+            <option value="">Выберите направление</option>
+            @foreach (var direction in Model.InternshipDirections)
+            {
+                <option value="@direction">@direction</option>
+            }
+        </select>
+        <input type="text" id="newInternshipDirection" class="form-control mt-2" placeholder="Добавить новое направление" />
+        <button type="button" id="addInternshipDirection" class="btn btn-success btn-sm mt-1">+</button>
     </div>
 
     <div class="form-group">
-        <label for="CurrentProjectId">Текущий проект</label>
-        <input asp-for="CurrentProject" class="form-control" id="CurrentProjectId" />
+        <label for="currentProject">Текущий проект</label>
+        <select asp-for="Trainee.CurrentProject" id="currentProject" class="form-control">
+            <option value="">Выберите проект</option>
+            @foreach (var project in Model.Projects)
+            {
+                <option value="@project">@project</option>
+            }
+        </select>
+        <input type="text" id="newCurrentProject" class="form-control mt-2" placeholder="Добавить новый проект" />
+        <button type="button" id="addCurrentProject" class="btn btn-success btn-sm mt-1">+</button>
     </div>
 
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Trainee.Id" />
 
     <button type="submit" class="btn btn-primary">Сохранить изменения</button>
 </form>
+
+<script>
+    async function postData(url, data) {
+        try {
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) throw new Error("Ошибка при отправке данных");
+            return response;
+        } catch (error) {
+            console.error("Ошибка сети:", error);
+        }
+    }
+
+    document.getElementById("addInternshipDirection").addEventListener("click", async function() {
+        var newDirection = document.getElementById("newInternshipDirection").value.trim();
+        if (newDirection) {
+            let response = await postData('TraineeRedactor/AddInternshipDirection', newDirection);
+            if (response) {
+                var select = document.getElementById("internshipDirection");
+                var option = document.createElement("option");
+                option.value = newDirection;
+                option.textContent = newDirection;
+                select.appendChild(option);
+                select.value = newDirection;
+                document.getElementById("newInternshipDirection").value = "";
+            }
+        }
+    });
+
+    document.getElementById("addCurrentProject").addEventListener("click", async function() {
+        var newProject = document.getElementById("newCurrentProject").value.trim();
+        if (newProject) {
+            let response = await postData('/TraineeRedactor/AddCurrentProject', newProject);
+            if (response) {
+                var select = document.getElementById("currentProject");
+                var option = document.createElement("option");
+                option.value = newProject;
+                option.textContent = newProject;
+                select.appendChild(option);
+                select.value = newProject;
+                document.getElementById("newCurrentProject").value = "";
+            }
+        }
+    });
+</script>

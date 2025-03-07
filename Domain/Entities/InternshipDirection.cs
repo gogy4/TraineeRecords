@@ -6,9 +6,15 @@ public class InternshipDirection : IResource, IEntity
     public string Name { get; private set; }
     public int CountTrainees { get; private set; }
     
-    public void IncrementTrainees()
+    public void IncreaseTraineeCount()
     {
         CountTrainees++;
+    }
+    
+    public void DecreaseTraineeCount()
+    {
+        if (CountTrainees > 0) CountTrainees--;
+        else throw new ArgumentException("Cannot decrease the trainee count");
     }
 
     public InternshipDirection(string direction, int countTrainees=0)

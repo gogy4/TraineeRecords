@@ -20,7 +20,7 @@ public class TraineeListController(TraineeServices traineeServices, CurrentProje
             projectsName.Add((await projectServices.GetById(t.CurrentProjectId)).Name);
         }
         var resourcesName = (directionsName, projectsName);
-
+    
         var model = new TraineeListViewModel(trainees, directions, projects, resourcesName);
         return View(model);
     }
@@ -50,5 +50,6 @@ public class TraineeListController(TraineeServices traineeServices, CurrentProje
         return View("Index", model);
     }
 
+    
 
 }
