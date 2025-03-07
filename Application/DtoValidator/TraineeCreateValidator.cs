@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace Application.DtoValidator
 {
-    public class TraineeCreateValidator : AbstractValidator<CreateTraineeDto>
+    public class TraineeCreateValidator : AbstractValidator<TraineeDto>
     {
         private readonly TraineeServices traineeServices;
 
@@ -22,13 +22,14 @@ namespace Application.DtoValidator
             RuleFor(x => x.PhoneNumber)
                 .Matches(@"^\+7\d{10}$").WithMessage("Номер телефона должен начинаться с +7 и содержать 10 цифр после него")
                 .When(x => !string.IsNullOrEmpty(x.PhoneNumber))  
-                .MustAsync((phone, token) => traineeServices.PhoneNumberHaveNotUsed(phone))
+                .MustAsync(async (trainee, phone, token) => await traineeServices.PhoneNumberHaveNotUsed(phone, trainee.Id))
                 .WithMessage("Данный номер телефона уже зарегистрирован")
                 .When(x => !string.IsNullOrEmpty(x.PhoneNumber));
 
+
             RuleFor(x => x.Email)
                 .EmailAddress().WithMessage("Email не является действительным")
-                .MustAsync((email, token) => traineeServices.EmailHaveNot(email))
+                .MustAsync(async (trainee, email, token) => await traineeServices.EmailHaveNot(email, trainee.Id))
                 .WithMessage("Данная почта уже зарегистрирована");
         }
     }

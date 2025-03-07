@@ -19,7 +19,7 @@ public class CreateTraineeController(TraineeServices traineeServices, ResourceSe
 
     [HttpPost]
     [Route("Create")]
-    public async Task<IActionResult> CreateTrainee(CreateTraineeDto traineeDto)
+    public async Task<IActionResult> CreateTrainee(TraineeDto traineeDto)
     {
         try
         {

@@ -18,7 +18,7 @@ public class CurrentProjectRepository(AppDbContext context) : ICurrentProjectRep
         await context.SaveChangesAsync();
     }
 
-    public async Task<CurrentProject?> GetByIdAsync(Guid id)
+    public async Task<CurrentProject?> GetByIdAsync(Guid? id)
     {
         return await context.CurrentProjects.FindAsync(id);
     }

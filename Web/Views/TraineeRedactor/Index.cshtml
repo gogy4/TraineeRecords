@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Application.Dto.TraineeDto
+
+<h2>Редактировать информацию о стажере</h2>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Errors"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Errors"]
+    </div>
+}
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label for="Name">Имя</label>
+        <input asp-for="Name" class="form-control" id="Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Surname">Фамилия</label>
+        <input asp-for="Surname" class="form-control" id="Surname" />
+    </div>
+
+    <div class="form-group">
+        <label for="Gender">Пол</label>
+        <input asp-for="Gender" class="form-control" id="Gender" />
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input asp-for="Email" class="form-control" id="Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="PhoneNumber">Номер телефона</label>
+        <input asp-for="PhoneNumber" class="form-control" id="PhoneNumber" />
+    </div>
+
+    <div class="form-group">
+        <label for="DateOfBirth">Дата рождения</label>
+        <input asp-for="DateOfBirth" class="form-control" id="DateOfBirth" type="date" />
+    </div>
+
+    <div class="form-group">
+        <label for="InternshipDirectionId">Направление стажировки</label>
+        <input asp-for="InternshipDirection" class="form-control" id="InternshipDirectionId" />
+    </div>
+
+    <div class="form-group">
+        <label for="CurrentProjectId">Текущий проект</label>
+        <input asp-for="CurrentProject" class="form-control" id="CurrentProjectId" />
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+</form>

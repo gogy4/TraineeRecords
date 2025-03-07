@@ -14,7 +14,7 @@
                 <option value="">Все направления</option>
                 @foreach (var direction in Model.Directions)
                 {
-                    <option value="@direction.Name" selected="@(Context.Request.Query["directionFilter"] == direction.Name ? "selected" : "")">
+                    <option value="@direction.Name" selected="@(string.Equals(ViewBag.SelectedDirection, direction.Name, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
                         @direction.Name
                     </option>
                 }
@@ -27,7 +27,7 @@
                 <option value="">Все проекты</option>
                 @foreach (var project in Model.Projects)
                 {
-                    <option value="@project.Name" selected="@(Context.Request.Query["projectFilter"] == project.Name ? "selected" : "")">
+                    <option value="@project.Name" selected="@(string.Equals(ViewBag.SelectedProject, project.Name, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
                         @project.Name
                     </option>
                 }
@@ -44,22 +44,36 @@
 
 <table class="table table-bordered mt-4">
     <thead>
-        <tr>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Действия</th>
-        </tr>
+    <tr>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Направление</th>
+        <th>Проект</th>
+        <th>Действия</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var trainee in Model.Trainees)
+    @if (Model.Trainees.Any())
+    {
+        @for (int i = 0; i < Model.Trainees.Count; i++)
         {
             <tr>
-                <td>@trainee.Name</td>
-                <td>@trainee.Surname</td>
+                <td>@Model.Trainees[i].Name</td>
+                <td>@Model.Trainees[i].Surname</td>
+                <td>@Model.ResourcesName.Item1[i]</td>
+                <td>@Model.ResourcesName.Item2[i]</td>
                 <td>
-                    <a href="#" class="btn btn-info btn-sm">Подробнее</a>
+                    <a href="@Url.Action("Index", "TraineeRedactor", new { traineeId = Model.Trainees[i].Id })" class="btn btn-info btn-sm">Подробнее</a>
                 </td>
+
             </tr>
         }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5" class="text-center">Нет стажеров по выбранным фильтрам</td>
+        </tr>
+    }
     </tbody>
 </table>

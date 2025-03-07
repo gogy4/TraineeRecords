@@ -4,19 +4,20 @@ namespace Application.Services;
 
 public class CurrentProjectServices(ICurrentProjectRepository repository)
 {
-    public async Task<CurrentProject> Create(string name)
+    public async Task Create(string name)
     {
         var project = new CurrentProject(name);
         await repository.AddAsync(project);
-        return project;
     }
 
     public async Task<CurrentProject> GetByName(string name)
     {
-        return (await repository.GetByNameAsync(name)).FirstOrDefault();
+        return (await repository.GetByNameAsync(name))
+            .Where(p => p.Name == name)
+            .FirstOrDefault();
     }
 
-    public async Task<CurrentProject> GetById(Guid id)
+    public async Task<CurrentProject> GetById(Guid? id)
     {
         return await repository.GetByIdAsync(id);
     }

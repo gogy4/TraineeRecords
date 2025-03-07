@@ -23,7 +23,7 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<Trainee?> GetByIdAsync(Guid id)
+    public async Task<Trainee?> GetByIdAsync(Guid? id)
     {
         return await context.Trainees.FindAsync(id);
     }
@@ -33,11 +33,13 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
         return await context.Trainees.FirstOrDefaultAsync(t => t.Email == email);
     }
 
-    public async Task<List<Trainee>> GetByResourcesName(Guid internshipDirectionId, Guid currentProjectId)
+    public async Task<List<Trainee>> GetByResourceIds(Guid? internshipDirectionId, Guid? currentProjectId)
     {
         return await context.Trainees
-            .Where(t => (currentProjectId == Guid.Empty || t.CurrentProjectId == currentProjectId)
-                        && (internshipDirectionId == Guid.Empty || t.InternshipDirectionId == internshipDirectionId))
+            .Where(t => (currentProjectId == Guid.Empty || currentProjectId == null ||
+                         t.CurrentProjectId == currentProjectId)
+                        && (internshipDirectionId == Guid.Empty || currentProjectId == null ||
+                            t.InternshipDirectionId == internshipDirectionId))
             .ToListAsync();
     }
 
@@ -60,7 +62,6 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
             .ToListAsync();
     }
 
-   
 
     public async Task DeleteAsync(Trainee trainee)
     {

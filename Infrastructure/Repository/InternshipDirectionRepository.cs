@@ -18,7 +18,7 @@ public class InternshipDirectionRepository(AppDbContext context) : IInternshipDi
         await context.SaveChangesAsync();
     }
 
-    public async Task<InternshipDirection?> GetByIdAsync(Guid id)
+    public async Task<InternshipDirection?> GetByIdAsync(Guid? id)
     {
         return await context.InternshipDirections.FindAsync(id);
     }

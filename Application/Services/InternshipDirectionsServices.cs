@@ -4,16 +4,17 @@ namespace Application.Services;
 
 public class InternshipDirectionsServices(IInternshipDirectionRepository repository)
 {
-    public async Task<InternshipDirection> Create(string name)
+    public async Task Create(string name)
     {
         var internshipDirection = new InternshipDirection(name);
         await repository.AddAsync(internshipDirection);
-        return internshipDirection;
     }
 
     public async Task<InternshipDirection> GetByName(string name)
     {
-        return (await repository.GetByNameAsync(name)).FirstOrDefault();
+        return (await repository.GetByNameAsync(name))
+            .Where(d => d.Name == name)
+            .FirstOrDefault();
     }
     
     public async Task<List<InternshipDirection>> GetByFilter(string filter)
@@ -22,7 +23,7 @@ public class InternshipDirectionsServices(IInternshipDirectionRepository reposit
         return await repository.GetByNameAsync(filter);
     }
     
-    public async Task<InternshipDirection> GetById(Guid id)
+    public async Task<InternshipDirection> GetById(Guid? id)
     {
         return await repository.GetByIdAsync(id);
     }
