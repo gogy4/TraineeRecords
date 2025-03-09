@@ -1,20 +1,32 @@
-﻿using Domain.Entities;
+﻿using Application.Dto;
+using Domain.Entities;
 
 namespace WebApplication1.Models;
 
 public class TraineeListViewModel
 {
-    public List<Trainee> Trainees { get; set; }
-    public List<InternshipDirection> Directions { get; set; }
-    public List<CurrentProject> Projects { get; set; }
-    public (List<string> directionsName, List<string> projectsName) ResourcesName { get; set; }
+    public List<TraineeListDto> Trainees { get; set; }
+    public Dictionary<Guid, (string direction, string project)> TraineeResources { get; set; } = new();
 
 
-    public TraineeListViewModel(List<Trainee> trainees, List<InternshipDirection> directions, List<CurrentProject> projects, (List<string> directionsName, List<string> projectsName) resourcesName)
+    public TraineeListViewModel(List<TraineeListDto> trainees, ResourcePropertiesDto resourceProperties)
     {
         Trainees = trainees;
-        Directions = directions;
-        Projects = projects;
-        ResourcesName = resourcesName;
+        InitTraineeResources(resourceProperties);
+    }
+
+    private void InitTraineeResources(ResourcePropertiesDto resourceProperties)
+    {
+        var projectNames = resourceProperties.ProjectNames;
+        var directionNames = resourceProperties.DirectionNames;
+
+        foreach (var trainee in Trainees)
+            TraineeResources[trainee.Id] = (directionNames[trainee.InternshipDirectionId],
+                projectNames[trainee.CurrentProjectId]);
+    }
+
+    public TraineeListViewModel()
+    {
+        
     }
 }

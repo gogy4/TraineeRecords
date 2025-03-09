@@ -12,10 +12,10 @@
             <label for="directionFilter">Направление</label>
             <select id="directionFilter" name="directionFilter" class="form-control">
                 <option value="">Все направления</option>
-                @foreach (var direction in Model.Directions)
+                @foreach (var direction in Model.TraineeResources.Values)
                 {
-                    <option value="@direction.Name" selected="@(string.Equals(ViewBag.SelectedDirection, direction.Name, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
-                        @direction.Name
+                    <option value="@direction.direction" selected="@(string.Equals(ViewBag.SelectedDirection, direction.direction, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
+                        @direction.direction
                     </option>
                 }
             </select>
@@ -25,10 +25,10 @@
             <label for="projectFilter">Проект</label>
             <select id="projectFilter" name="projectFilter" class="form-control">
                 <option value="">Все проекты</option>
-                @foreach (var project in Model.Projects)
+                @foreach (var project in Model.TraineeResources.Values)
                 {
-                    <option value="@project.Name" selected="@(string.Equals(ViewBag.SelectedProject, project.Name, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
-                        @project.Name
+                    <option value="@project.project" selected="@(string.Equals(ViewBag.SelectedProject, project.project, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
+                        @project.project
                     </option>
                 }
             </select>
@@ -60,8 +60,8 @@
             <tr>
                 <td>@Model.Trainees[i].Name</td>
                 <td>@Model.Trainees[i].Surname</td>
-                <td>@Model.ResourcesName.Item1[i]</td>
-                <td>@Model.ResourcesName.Item2[i]</td>
+                <td>@Model.TraineeResources[Model.Trainees[i].Id].direction</td>
+                <td>@Model.TraineeResources[Model.Trainees[i].Id].project</td>
                 <td>
                     <a href="@Url.Action("Index", "TraineeRedactor", new { traineeId = Model.Trainees[i].Id })" class="btn btn-info btn-sm">Подробнее</a>
                 </td>

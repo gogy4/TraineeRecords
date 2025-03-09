@@ -80,24 +80,19 @@
 
 <script>
     async function postData(url, data) {
-        try {
-            let response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+        let response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-            if (!response.ok) throw new Error("Ошибка при отправке данных");
-            return response;
-        } catch (error) {
-            console.error("Ошибка сети:", error);
-        }
+        return response;
     }
 
     document.getElementById("addInternshipDirection").addEventListener("click", async function() {
         var newDirection = document.getElementById("newInternshipDirection").value.trim();
         if (newDirection) {
-            let response = await postData('TraineeRedactor/AddInternshipDirection', newDirection);
+            let response = await postData('/CreateNewResource/AddInternshipDirection', newDirection);
             if (response) {
                 var select = document.getElementById("internshipDirection");
                 var option = document.createElement("option");
@@ -113,7 +108,7 @@
     document.getElementById("addCurrentProject").addEventListener("click", async function() {
         var newProject = document.getElementById("newCurrentProject").value.trim();
         if (newProject) {
-            let response = await postData('/TraineeRedactor/AddCurrentProject', newProject);
+            let response = await postData('/CreateNewResource/AddCurrentProject', newProject);
             if (response) {
                 var select = document.getElementById("currentProject");
                 var option = document.createElement("option");

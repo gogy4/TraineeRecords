@@ -44,37 +44,44 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
     }
 
 
-    public async Task<List<Trainee>> GetByFilter(string directionFilter, string currentProjectId)
+    public async Task<List<TraineeListDto>> GetByFilter(string directionFilter, string currentProjectId)
     {
         var (projectId, directionId) = await resourceServices.GetIds(directionFilter, currentProjectId);
-        return await repository.GetByResourceIds(directionId, projectId);
+        return (await repository.GetByResourceIds(directionId, projectId))
+            .Select(t => new TraineeListDto(t))
+            .ToList();
     }
 
-    public async Task<Dictionary<Guid, List<Trainee>>> GetByDirection(List<InternshipDirection> directions)
+    public async Task<Dictionary<Guid, List<TraineeListDto>>> GetByDirection(List<InternshipDirectionDto> directions)
     {
-        var traineeList = new Dictionary<Guid, List<Trainee>>();
+        var traineeList = new Dictionary<Guid, List<TraineeListDto>>();
         foreach (var direction in directions)
         {
-            var trainee = await repository.GetByResourceIds(direction.Id, Guid.Empty);
+            var trainee = (await repository.GetByResourceIds(direction.Id, Guid.Empty))
+                .Select(t => new TraineeListDto(t))
+                .ToList();
             traineeList[direction.Id] = trainee;
         }
 
         return traineeList;
     }
-    
-    public async Task<Dictionary<Guid, List<Trainee>>> GetByProject(List<CurrentProject> projects)
+
+    public async Task<Dictionary<Guid, List<TraineeListDto>>> GetByProject(List<CurrentProjectDto> projects)
     {
-        var traineeList = new Dictionary<Guid, List<Trainee>>();
+        var traineeList = new Dictionary<Guid, List<TraineeListDto>>();
         foreach (var project in projects)
         {
-            var trainee = await repository.GetByResourceIds(Guid.Empty, project.Id);
+            var trainee = (await repository.GetByResourceIds(Guid.Empty, project.Id))
+                .Select(t => new TraineeListDto(t))
+                .ToList();
+            ;
             traineeList[project.Id] = trainee;
         }
 
         return traineeList;
     }
-    
-    public async Task<Trainee> GetById(Guid traineeId)
+
+    private async Task<Trainee> GetById(Guid traineeId)
     {
         return await repository.GetByIdAsync(traineeId);
     }
@@ -91,8 +98,28 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         return trainee is null || trainee.Id == traineeId;
     }
 
-    public async Task<List<Trainee>> GetAll()
+    public async Task<List<TraineeListDto>> GetAll()
     {
-        return await repository.GetAllAsync();
+        return (await repository.GetAllAsync())
+            .Select(t => new TraineeListDto(t))
+            .ToList();
+    }
+
+    public async Task<(ResourcePropertiesDto resourcePropertiesDto, TraineeDto traineeDto)> GetTraineeWithResources(Guid traineeId)
+    {
+        var trainee = await GetById(traineeId);
+        var resourcePropertiesDto = await resourceServices.GetResourceProperties();
+        var direction = resourcePropertiesDto.DirectionNames
+            .Where(kv => kv.Key == trainee.InternshipDirectionId)
+            .Select(kv => kv.Value)
+            .FirstOrDefault();
+        
+        var project = resourcePropertiesDto.ProjectNames
+            .Where(kv => kv.Key == trainee.CurrentProjectId)
+            .Select(kv => kv.Value)
+            .FirstOrDefault();
+        
+        var traineeDto = new TraineeDto(trainee, project, direction);
+        return (resourcePropertiesDto, traineeDto);
     }
 }

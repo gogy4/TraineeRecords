@@ -14,13 +14,8 @@ public class TraineeRedactorController(
     [HttpGet]
     public async Task<IActionResult> Index(Guid traineeId)
     {
-        var trainee = await traineeServices.GetById(traineeId);
-        var direction = (await directionsServices.GetById(trainee.InternshipDirectionId)).Name;
-        var project = (await projectServices.GetById(trainee.CurrentProjectId)).Name;
-        var (directionNames, projectNames) = await resourceServices.GetNameResources();
-        
-        var traineeDto = new TraineeDto(trainee, project, direction);
-        var model = new EditTraineeViewModel(traineeDto, directionNames, projectNames, 
+        var (resourcesProperties, traineeDto) = await traineeServices.GetTraineeWithResources(traineeId);
+        var model = new EditTraineeViewModel(traineeDto, resourcesProperties.DirectionNames.Values.ToList(), resourcesProperties.ProjectNames.Values.ToList(), 
             TempData["Errors"] as string, TempData["Success"] as string);
         
         return View(model);
@@ -42,21 +37,4 @@ public class TraineeRedactorController(
             return RedirectToAction("Index", new { traineeId = trainee.Id });
         }
     }
-    
-    [HttpPost]
-    [Route("AddInternshipDirection")]
-    public async Task<IActionResult> AddInternshipDirection([FromBody] string newDirection)
-    {
-        await resourceServices.CreateInternshipDirection(newDirection);
-        return RedirectToAction("Index");
-    }
-
-    [HttpPost]
-    [Route("AddCurrentProject")]
-    public async Task<IActionResult> AddCurrentProject([FromBody] string newProject)
-    {
-        await resourceServices.CreateCurrentProject(newProject);
-        return RedirectToAction("Index");
-    }
-    
 }

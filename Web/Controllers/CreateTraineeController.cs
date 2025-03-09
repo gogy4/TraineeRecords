@@ -11,8 +11,8 @@ public class CreateTraineeController(TraineeServices traineeServices, ResourceSe
     [Route("")]
     public async Task<IActionResult> Index()
     {
-        var (directionNames, projectNames) = await resourceServices.GetNameResources();
-        var traineeViewModel = new CreateTraineeViewModel(directionNames, projectNames, 
+        var resourceProperties = await resourceServices.GetResourceProperties();
+        var traineeViewModel = new CreateTraineeViewModel(resourceProperties.DirectionNames.Values.ToList(), resourceProperties.ProjectNames.Values.ToList(), 
             TempData["Errors"] as string, TempData["Success"] as string);
         return View(traineeViewModel);
     }
@@ -33,7 +33,7 @@ public class CreateTraineeController(TraineeServices traineeServices, ResourceSe
             return RedirectToAction("Index");
         }
     }
-
+    
     [HttpPost]
     [Route("AddInternshipDirection")]
     public async Task<IActionResult> AddInternshipDirection([FromBody] string newDirection)

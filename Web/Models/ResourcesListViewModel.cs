@@ -5,12 +5,12 @@ namespace WebApplication1.Models
 {
     public class ResourcesListViewModel
     {
-        public List<CurrentProject> Projects { get; set; }
-        public List<InternshipDirection> Directions { get; set; }
+        public List<CurrentProjectDto> Projects { get; set; }
+        public List<InternshipDirectionDto> Directions { get; set; }
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
-        public Dictionary<Guid, List<Trainee>> TraineesByProject { get; set; }
-        public Dictionary<Guid, List<Trainee>> TraineesByDirection { get; set; }
+        public Dictionary<Guid, List<TraineeListDto>> TraineesByProject { get; set; }
+        public Dictionary<Guid, List<TraineeListDto>> TraineesByDirection { get; set; }
 
         public int TotalPagesProjects { get; set; }
         public int TotalPagesDirections { get; set; }
@@ -18,8 +18,8 @@ namespace WebApplication1.Models
         public string SearchQuery { get; set; }
         public string SortOrder { get; set; }
 
-        public ResourcesListViewModel(string activeTab, string searchQuery, string sortOrder, int totalPagesProjects, int totalPagesDirections, List<CurrentProject> projects, List<InternshipDirection> directions,
-            Dictionary<Guid, List<Trainee>> traineesByProject, Dictionary<Guid, List<Trainee>> traineesByDirection, int currentPage = 1, int pageSize = 10)
+        public ResourcesListViewModel(string activeTab, string searchQuery, string sortOrder, int totalPagesProjects, int totalPagesDirections, List<CurrentProjectDto> projects, List<InternshipDirectionDto> directions,
+            Dictionary<Guid, List<TraineeListDto>> traineesByProject, Dictionary<Guid, List<TraineeListDto>> traineesByDirection, int currentPage = 1, int pageSize = 10)
         {
             SortOrder = sortOrder;
             ActiveTab = activeTab;
