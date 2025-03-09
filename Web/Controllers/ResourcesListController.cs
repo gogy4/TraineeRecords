@@ -21,16 +21,26 @@ public class ResourcesListController(
         var directions = await internshipDirectionsServices.GetByFilter(searchQuery);
         var traineeByDirection = await traineesServices.GetByDirection(directions);
         var traineeByProject = await traineesServices.GetByProject(projects);
-        if (sortOrder == "trainees")
+        switch (sortOrder)
         {
-            projects = projects.OrderByDescending(p => p.CountTrainees).ToList();
-            directions = directions.OrderByDescending(d => d.CountTrainees).ToList();
+            case "trainees_desc":
+                projects = projects.OrderBy(p => p.CountTrainees).ToList();
+                directions = directions.OrderBy(d => d.CountTrainees).ToList();
+                break;
+            case "trainees":
+                projects = projects.OrderByDescending(p => p.CountTrainees).ToList();
+                directions = directions.OrderByDescending(d => d.CountTrainees).ToList();
+                break;
+            case "name_desc":
+                projects = projects.OrderByDescending(p => p.Name).ToList();
+                directions = directions.OrderByDescending(d => d.Name).ToList();
+                break;
+            default:
+                projects = projects.OrderBy(p => p.Name).ToList();
+                directions = directions.OrderBy(d => d.Name).ToList();
+                break;
         }
-        else
-        {
-            projects = projects.OrderBy(p => p.Name).ToList();
-            directions = directions.OrderBy(d => d.Name).ToList();
-        }
+
 
         var projectPaged = projects.Skip((page - 1) * pageSize).Take(pageSize).ToList();
         var directionPaged = directions.Skip((page - 1) * pageSize).Take(pageSize).ToList();

@@ -50,28 +50,28 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         return await repository.GetByResourceIds(directionId, projectId);
     }
 
-    public async Task<List<Trainee>> GetByDirection(List<InternshipDirection> directions)
+    public async Task<Dictionary<Guid, List<Trainee>>> GetByDirection(List<InternshipDirection> directions)
     {
-        var traineeList = new List<Trainee>();
+        var traineeList = new Dictionary<Guid, List<Trainee>>();
         foreach (var direction in directions)
         {
             var trainee = await repository.GetByResourceIds(direction.Id, Guid.Empty);
-            traineeList.AddRange(trainee);
+            traineeList[direction.Id] = trainee;
         }
 
-        return traineeList.Distinct().ToList();
+        return traineeList;
     }
     
-    public async Task<List<Trainee>> GetByProject(List<CurrentProject> projects)
+    public async Task<Dictionary<Guid, List<Trainee>>> GetByProject(List<CurrentProject> projects)
     {
-        var traineeList = new List<Trainee>();
+        var traineeList = new Dictionary<Guid, List<Trainee>>();
         foreach (var project in projects)
         {
             var trainee = await repository.GetByResourceIds(Guid.Empty, project.Id);
-            traineeList.AddRange(trainee);
+            traineeList[project.Id] = trainee;
         }
 
-        return traineeList.Distinct().ToList();
+        return traineeList;
     }
     
     public async Task<Trainee> GetById(Guid traineeId)

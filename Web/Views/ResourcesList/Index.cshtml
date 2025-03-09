@@ -7,21 +7,19 @@
 <h2>Список направлений и проектов</h2>
 
 <form method="get" asp-action="Index" id="searchForm">
-    <input type="text" name="searchQuery" placeholder="Поиск..." value="@Model.SearchQuery" />
-    <select name="sortOrder">
-        <option value="name" selected="@(Model.SortOrder == "name" ? "selected" : null)">По названию</option>
-        <option value="trainees" selected="@(Model.SortOrder == "trainees" ? "selected" : null)">По количеству стажеров</option>
-    </select>
-    <input type="hidden" name="activeTab" id="activeTab" value="@Model.ActiveTab" />
+    <input type="text" name="searchQuery" placeholder="Поиск..." value="@Model.SearchQuery"/>
+    <input type="hidden" name="activeTab" id="activeTab" value="@Model.ActiveTab"/>
     <button type="submit">🔍 Найти</button>
 </form>
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link @(Model.ActiveTab == "projects" ? "active" : "")" id="projects-tab" data-toggle="tab" href="#projects">Проекты</a>
+        <a class="nav-link @(Model.ActiveTab == "projects" ? "active" : "")" id="projects-tab" data-toggle="tab"
+           href="#projects">Проекты</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @(Model.ActiveTab == "directions" ? "active" : "")" id="directions-tab" data-toggle="tab" href="#directions">Направления</a>
+        <a class="nav-link @(Model.ActiveTab == "directions" ? "active" : "")" id="directions-tab" data-toggle="tab"
+           href="#directions">Направления</a>
     </li>
 </ul>
 
@@ -32,10 +30,23 @@
             <thead>
             <tr>
                 <th>
-                    <a href="#" class="sort-link" data-sort="name">Название 🔼</a>
+                    <a href="@Url.Action("Index", new
+                             {
+                                 activeTab = Model.ActiveTab, searchQuery = Model.SearchQuery,
+                                 sortOrder = Model.SortOrder == "name" ? "name_desc" : "name",
+                                 page = Model.CurrentPage, pageSize = Model.PageSize
+                             })"
+                       class="sort-link" data-sort="name">
+                        Название @(Model.SortOrder == "name" ? "🔽" : Model.SortOrder == "name_desc" ? "🔼" : "")
+                    </a>
                 </th>
+
                 <th>
-                    <a href="#" class="sort-link" data-sort="trainees">Кол-во стажеров 🔼</a>
+                    <a href="@Url.Action("Index", new { activeTab = Model.ActiveTab, searchQuery = Model.SearchQuery, sortOrder = Model.SortOrder == "trainees" ? "trainees_desc" : "trainees", page = Model.CurrentPage, pageSize = Model.PageSize })"
+                       class="sort-link" data-sort="trainees">
+                        Кол-во
+                        стажеров @(Model.SortOrder == "trainees" ? "🔽" : Model.SortOrder == "trainees_desc" ? "🔼" : "")
+                    </a>
                 </th>
                 <th>Стажеры</th>
             </tr>
@@ -49,12 +60,25 @@
                     <td>
                         <button class="toggle-trainees btn btn-info" data-id="@project.Id">👥 Показать</button>
                         <ul class="trainees-list" id="trainees-@project.Id" style="display:none;">
-                            @foreach (var trainee in Model.TraineesByProject)
+                            @if (Model.TraineesByProject.ContainsKey(project.Id))
                             {
-                                <li>@trainee.Name</li>
+                                var i = 1;
+                                foreach (var trainee in Model.TraineesByProject[project.Id])
+                                {
+                                    <li>
+                                        Стажер номер @(i) <br/>
+                                        Имя: @trainee.Name <br/>
+                                        Фамилия: @trainee.Surname <br/>
+                                        Почта: @trainee.Email <br/>
+                                        Номер телефона: @(trainee.PhoneNumber ?? "не указан")<br/>
+                                    </li>
+                                    
+                                    i++;
+                                }
                             }
                         </ul>
                     </td>
+
                 </tr>
             }
             </tbody>
@@ -67,10 +91,21 @@
             <thead>
             <tr>
                 <th>
-                    <a href="#" class="sort-link" data-sort="name">Название 🔼</a>
-                </th>
+                    <a href="@Url.Action("Index", new
+                             {
+                                 activeTab = Model.ActiveTab, searchQuery = Model.SearchQuery,
+                                 sortOrder = Model.SortOrder == "name" ? "name_desc" : "name",
+                                 page = Model.CurrentPage, pageSize = Model.PageSize
+                             })"
+                       class="sort-link" data-sort="name">
+                        Название @(Model.SortOrder == "name" ? "🔽" : Model.SortOrder == "name_desc" ? "🔼" : "")
+                    </a></th>
                 <th>
-                    <a href="#" class="sort-link" data-sort="trainees">Кол-во стажеров 🔼</a>
+                    <a href="@Url.Action("Index", new { activeTab = Model.ActiveTab, searchQuery = Model.SearchQuery, sortOrder = Model.SortOrder == "trainees" ? "trainees_desc" : "trainees", page = Model.CurrentPage, pageSize = Model.PageSize })"
+                       class="sort-link" data-sort="trainees">
+                        Кол-во
+                        стажеров @(Model.SortOrder == "trainees" ? "🔽" : Model.SortOrder == "trainees_desc" ? "🔼" : "")
+                    </a>
                 </th>
                 <th>Стажеры</th>
             </tr>
@@ -84,9 +119,21 @@
                     <td>
                         <button class="toggle-trainees btn btn-info" data-id="@direction.Id">👥 Показать</button>
                         <ul class="trainees-list" id="trainees-@direction.Id" style="display:none;">
-                            @foreach (var trainee in Model.TraineesByDirection)
+                            @if (Model.TraineesByDirection.ContainsKey(direction.Id))
                             {
-                                <li>@trainee.Name</li>
+                                var i = 1;
+                                foreach (var trainee in Model.TraineesByDirection[direction.Id])
+                                {
+                                    <li>
+                                        Стажер номер @(i) <br/>
+                                        Имя: @trainee.Name <br/>
+                                        Фамилия: @trainee.Surname <br/>
+                                        Почта: @trainee.Email <br/>
+                                        Номер телефона: @(trainee.PhoneNumber ?? "не указан")<br/>
+                                    </li>
+                                    
+                                    i++;
+                                }
                             }
                         </ul>
                     </td>
@@ -101,8 +148,8 @@
     <input type="hidden" name="activeTab" id="activeTabPagination" value="@Model.ActiveTab"/>
     <input type="hidden" name="searchQuery" value="@Model.SearchQuery"/>
     <input type="hidden" name="sortOrder" value="@Model.SortOrder"/>
-    <input type="hidden" name="page" id="currentPage" value="@Model.CurrentPage" />
-    <input type="hidden" name="pageSize" id="pageSizeHidden" value="@Model.PageSize" />
+    <input type="hidden" name="page" id="currentPage" value="@Model.CurrentPage"/>
+    <input type="hidden" name="pageSize" id="pageSizeHidden" value="@Model.PageSize"/>
 
     <label>Размер страницы:
         <select name="pageSize" id="pageSizeSelect" onchange="updatePageSizeFromSelect()">
@@ -111,7 +158,8 @@
             <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
         </select>
         или
-        <input type="number" name="pageSizeInput" id="pageSizeInput" value="@Model.PageSize" min="1" onchange="updatePageSizeFromInput()" />
+        <input type="number" name="pageSizeInput" id="pageSizeInput" value="@Model.PageSize" min="1"
+               onchange="updatePageSizeFromInput()"/>
     </label>
 
     <div>
@@ -119,18 +167,30 @@
     </div>
 
     <div class="pagination-buttons">
-        <button type="submit" name="page" value="1" class="btn btn-primary" @(Model.CurrentPage == 1 ? "disabled" : "")>Первая страница</button>
-        <button type="submit" name="page" value="@(@Model.CurrentPage - 1)" class="btn btn-primary" @(Model.CurrentPage == 1 ? "disabled" : "")>Назад</button>
+        <button type="submit" name="page" value="1" class="btn btn-primary" @(Model.CurrentPage == 1 ? "disabled" : "")>
+            Первая страница
+        </button>
+        <button type="submit" name="page" value="@(@Model.CurrentPage - 1)" class="btn btn-primary"
+                @(Model.CurrentPage == 1 ? "disabled" : "")>Назад
+        </button>
 
         @if (Model.ActiveTab == "projects")
         {
-            <button type="submit" name="page" value="@(@Model.CurrentPage + 1)" class="btn btn-primary" @(Model.CurrentPage == Model.TotalPagesProjects ? "disabled" : "")>Вперёд</button>
-            <button type="submit" name="page" value="@Model.TotalPagesProjects" class="btn btn-primary" @(Model.CurrentPage == Model.TotalPagesProjects ? "disabled" : "")>Последняя страница</button>
+            <button type="submit" name="page" value="@(@Model.CurrentPage + 1)" class="btn btn-primary"
+                    @(Model.CurrentPage == Model.TotalPagesProjects ? "disabled" : "")>Вперёд
+            </button>
+            <button type="submit" name="page" value="@Model.TotalPagesProjects" class="btn btn-primary"
+                    @(Model.CurrentPage == Model.TotalPagesProjects ? "disabled" : "")>Последняя страница
+            </button>
         }
         else
         {
-            <button type="submit" name="page" value="@(@Model.CurrentPage + 1)" class="btn btn-primary" @(Model.CurrentPage == Model.TotalPagesDirections ? "disabled" : "")>Вперёд</button>
-            <button type="submit" name="page" value="@Model.TotalPagesDirections" class="btn btn-primary" @(Model.CurrentPage == Model.TotalPagesDirections ? "disabled" : "")>Последняя страница</button>
+            <button type="submit" name="page" value="@(@Model.CurrentPage + 1)" class="btn btn-primary"
+                    @(Model.CurrentPage == Model.TotalPagesDirections ? "disabled" : "")>Вперёд
+            </button>
+            <button type="submit" name="page" value="@Model.TotalPagesDirections" class="btn btn-primary"
+                    @(Model.CurrentPage == Model.TotalPagesDirections ? "disabled" : "")>Последняя страница
+            </button>
         }
     </div>
 </form>
@@ -140,13 +200,6 @@
 
     <script>
         $(document).ready(function () {
-            $('.sort-link').click(function (e) {
-                e.preventDefault();
-                var sortOrder = $(this).data('sort');
-                var activeTab = $('#activeTab').val();
-                var searchQuery = $('input[name="searchQuery"]').val();
-                $('#paginationForm').submit();
-            });
 
             $('a[data-toggle="tab"]').click(function () {
                 var activeTab = $(this).attr('href').substring(1);
@@ -194,3 +247,4 @@
         }
     </script>
 }
+
