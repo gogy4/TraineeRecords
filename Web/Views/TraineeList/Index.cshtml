@@ -55,7 +55,7 @@
     <tbody>
     @if (Model.Trainees.Any())
     {
-        @for (int i = 0; i < Model.Trainees.Count; i++)
+        @for (var i = 0; i < Model.Trainees.Count; i++)
         {
             <tr>
                 <td>@Model.Trainees[i].Name</td>

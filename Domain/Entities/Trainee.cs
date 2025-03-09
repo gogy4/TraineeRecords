@@ -44,4 +44,13 @@ public class Trainee : IEntity
         if (internshipDirectionId != default) InternshipDirectionId = internshipDirectionId;
         if (currentProjectId != default) CurrentProjectId = currentProjectId;
     }
+    
+    public override bool Equals(object obj)
+    {
+        return obj is Trainee trainee && trainee.Id == Id;
+    }
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }
