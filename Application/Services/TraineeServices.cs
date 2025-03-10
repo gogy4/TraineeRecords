@@ -82,7 +82,7 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
 
         return traineeList;
     }
-    
+
 
     private async Task<Trainee> GetById(Guid traineeId)
     {
@@ -108,7 +108,8 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
             .ToList();
     }
 
-    public async Task<(ResourcePropertiesDto resourcePropertiesDto, TraineeDto traineeDto)> GetTraineeWithResources(Guid traineeId)
+    public async Task<(ResourcePropertiesDto resourcePropertiesDto, TraineeDto traineeDto)> GetTraineeWithResources(
+        Guid traineeId)
     {
         var trainee = await GetById(traineeId);
         var resourcePropertiesDto = await resourceServices.GetResourceProperties();
@@ -116,12 +117,12 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
             .Where(kv => kv.Key == trainee.InternshipDirectionId)
             .Select(kv => kv.Value)
             .FirstOrDefault();
-        
+
         var project = resourcePropertiesDto.ProjectNames
             .Where(kv => kv.Key == trainee.CurrentProjectId)
             .Select(kv => kv.Value)
             .FirstOrDefault();
-        
+
         var traineeDto = new TraineeDto(trainee, project, direction);
         return (resourcePropertiesDto, traineeDto);
     }
@@ -140,7 +141,18 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
                 traineeDto.CurrentProjectId = resourceId;
                 break;
         }
-        
+
         await Edit(traineeDto);
+    }
+
+    public async Task<List<TraineeDto>> GetTraineeWithoutResource(Guid resourceId, string resourceType)
+    {
+        return resourceType == "Direction"
+            ? (await GetAll())
+            .Where(t => t.InternshipDirectionId != resourceId)
+            .ToList()
+            : (await GetAll())
+            .Where(t => t.CurrentProjectId != resourceId)
+            .ToList();
     }
 }

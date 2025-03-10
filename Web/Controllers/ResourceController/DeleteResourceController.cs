@@ -9,8 +9,8 @@ public class DeleteResourceController(DeleteResourceService deleteResourceServic
     public async Task<IActionResult> Index(string resourceType)
     {
         var resources = await resourceServices.GetAll();
-        var model = new DeleteResourceViewModel(resources.projects, resources.directions, TempData["Error"] as string,
-            TempData["Success"] as string, resourceType);
+        var model = new OperationResourceViewModel(resourceType, TempData["Error"] as string,
+            TempData["Success"] as string, projects: resources.projects, directions: resources.directions);
         return View(model);
     }
 

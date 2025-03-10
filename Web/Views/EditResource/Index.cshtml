@@ -1,0 +1,41 @@
+﻿@model OperationResourceViewModel
+
+@{
+    ViewData["Title"] = Model.ResourceType == "Direction"
+        ? "Добавление стажера на текущее направление"
+        : "Добавление стажера на текущий проект";
+}
+
+<h2>@(Model.ResourceType == "Direction" ? "Изменение участниокв на направление" : "Изменение участниокв на проект") @Model.ResourceName</h2>
+
+@if (!string.IsNullOrEmpty(Model.Errors))
+{
+    <div class="alert alert-danger">@Model.Errors</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.Success))
+{
+    <div class="alert alert-success">@Model.Success</div>
+}
+
+<form method="post" asp-action="Edit">
+    <div class="mb-3">
+        <label for="resourceId" class="form-label">
+            @(Model.ResourceType == "Direction"
+                ? "Добавьте нового стажера на направление"
+                : "Добавьте нового стажера на проект") @Model.ResourceName
+        </label>
+        <select class="form-select" id="traineeId" name="traineeId">
+            <option value="">@(Model.ResourceType == "Direction" ? "Выберите стажера на направление" : 
+                                 "Выберите стажера на проект") @Model.ResourceName</option>
+            @foreach (var trainee in Model.Trainees)
+            {
+                <option value="@trainee.Id">@trainee.Name</option>
+            }
+        </select>
+    </div>
+
+    <input type="hidden" id="resourceType" name="resourceType" value="@Model.ResourceType"/>
+    <input type="hidden" id="resourceId" name="resourceId" value="@Model.ResourceId"/>
+    <button type="submit" class="btn btn-success">Применить</button>
+</form>

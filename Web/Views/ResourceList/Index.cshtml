@@ -85,6 +85,11 @@
                             }
                         </ul>
                     </td>
+                    <td>
+                        <a href="@Url.Action("Index", "EditResource", new { resourceId = project.Id, resourceType = "Project" })"
+                           class="btn btn-warning">✏ Изменить стажеров</a>
+                    </td>
+
 
                 </tr>
             }
@@ -144,6 +149,11 @@
                             }
                         </ul>
                     </td>
+                    <td>
+                        <a href="@Url.Action("Index", "EditResource", new { resourceId = direction.Id, resourceType = "Direction" })"
+                           class="btn btn-warning">✏ Изменить стажеров</a>
+                    </td>
+
                 </tr>
             }
             </tbody>

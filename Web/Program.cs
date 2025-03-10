@@ -20,6 +20,7 @@ builder.Services.AddScoped<TraineeServices>();
 builder.Services.AddScoped<CurrentProjectServices>();
 builder.Services.AddScoped<InternshipDirectionsServices>();
 builder.Services.AddScoped<DeleteResourceService>();
+builder.Services.AddScoped<EditResourceNameService>();
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

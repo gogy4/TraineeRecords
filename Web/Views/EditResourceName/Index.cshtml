@@ -1,7 +1,7 @@
 ﻿@model OperationResourceViewModel
 
 @{
-    ViewData["Title"] = Model.ResourceType == "Direction" ? "Удаление направления" : "Удаление проекта";
+    ViewData["Title"] = Model.ResourceType == "Direction" ? "Изменение названия направления" : "Изменение названия проекта";
 }
 
 <h2>@(Model.ResourceType == "Direction" ? "Удаление направления" : "Удаление проекта")</h2>
@@ -16,7 +16,7 @@
     <div class="alert alert-success">@Model.Success</div>
 }
 
-<form method="post" asp-action="Delete">
+<form method="post" asp-action="Edit">
     <div class="mb-3">
         <label for="resourceId" class="form-label">
             @(Model.ResourceType == "Direction" ? "Выберите направление" : "Выберите проект")
@@ -40,8 +40,14 @@
         </select>
     </div>
 
-    <input type="hidden" id="resourceType" name="resourceType" value="@Model.ResourceType" />
-    <button type="submit" class="btn btn-danger">Удалить</button>
+    <div class="mb-3">
+        <label for="resourceId" class="form-label">
+            @(Model.ResourceType == "Direction" ? "Введите новое название направления" : "Введите новое названи проекта")
+        </label>
+        <input type="text" id="newName" name="newName" class="form-control mt-2"
+               placeholder="@(Model.ResourceType == "Direction" ? "Введите направление стажировки" : "Введите название проекта")"/>
+    </div>
+
+    <input type="hidden" id="resourceType" name="resourceType" value="@Model.ResourceType"/>
+    <button type="submit" class="btn btn-success">Применить</button>
 </form>
-
-

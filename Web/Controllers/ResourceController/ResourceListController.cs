@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers;
 
-public class ResourcesListController(TraineeServices traineeServices, ResourceServices resourceServices) : Controller
+public class ResourceListController(TraineeServices traineeServices, ResourceServices resourceServices) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(string activeTab = "projects", string searchQuery = "", 

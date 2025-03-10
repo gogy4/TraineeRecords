@@ -43,4 +43,12 @@ public class InternshipDirectionsServices(IInternshipDirectionRepository reposit
     {
         return await repository.GetAllAsync();
     }
+    
+    public async Task ChangeName(Guid id, string name)
+    {
+        var direction = await GetById(id);
+        if (direction is null) throw new ArgumentException("Выберите направление");
+        direction.ChangeName(name);
+        await Update(direction);
+    }
 }

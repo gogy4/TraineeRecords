@@ -14,7 +14,7 @@ public class InternshipDirection : IResource, IEntity
     public void DecreaseTraineeCount()
     {
         if (CountTrainees > 0) CountTrainees--;
-        else throw new ArgumentException("Cannot decrease the trainee count");
+        else throw new ArgumentException("Нельзя сделать количество стажеров меньше нуля.");
     }
 
     public InternshipDirection(string direction, int countTrainees=0)
@@ -28,5 +28,12 @@ public class InternshipDirection : IResource, IEntity
     {
         Id = Guid.NewGuid();
         CountTrainees = 0;
+    }
+    
+    public void ChangeName(string name)
+    {
+        if (name.Length is < 2 or > 50)
+            throw new ArgumentException("Имя проекта должн быть в диапозоне от 2 до 50 символов");
+        Name = name;
     }
 }

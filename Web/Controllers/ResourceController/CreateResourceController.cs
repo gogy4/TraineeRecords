@@ -9,8 +9,8 @@ public class CreateResourceController(TraineeServices traineeServices) : Control
     public async Task<IActionResult> Index(string resourceType)
     {
         var trainee = await traineeServices.GetAll();
-        var model = new CreateResourceViewModel(trainee, resourceType, TempData["Success"] as string,
-            TempData["Errors"] as string);
+        var model = new OperationResourceViewModel(resourceType, TempData["Errors"] as string,
+            TempData["Success"] as string, trainee);
         return View(model);
     }
 

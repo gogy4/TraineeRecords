@@ -44,4 +44,12 @@ public class CurrentProjectServices(ICurrentProjectRepository repository)
     {
         return await repository.GetAllAsync();
     }
+
+    public async Task ChangeName(Guid id, string name)
+    {
+        var project = await GetById(id);
+        if (project is null) throw new ArgumentException("Выберите проект");
+        project.ChangeName(name);
+        await Update(project);
+    }
 }
