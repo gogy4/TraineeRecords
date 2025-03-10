@@ -1,41 +1,41 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Application.Dto;
 
 public class TraineeDto
 {
     public Guid Id { get; set; }
-    [Required]
-    public string Name { get; set; }
-    [Required]
-    public string Surname { get; set; }
-    [Required]
-    public string Gender { get; set; }
-    [Required]
-    public string Email { get; set; }
-    public string? PhoneNumber { get; set; }
-    [Required]
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
+    public string Gender { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
-    [Required]
-    public string InternshipDirection { get; set; }
-    [Required]
-    public string CurrentProject { get; set; }
+    public string Email { get; set; } = string.Empty;
+    public string? PhoneNumber { get; set; }
+    public Guid InternshipDirectionId { get; set; }
+    public Guid CurrentProjectId { get; set; }
+    
+    
+    public string InternshipDirectionName { get; set; }
+    public string CurrentProjectName { get; set; }
 
-    public TraineeDto()
-    {
-        
-    }
-    public TraineeDto(Trainee trainee, string currentProject, string internshipDirection)
+
+    public TraineeDto(Trainee trainee, string directionName = null, string projectName = null)
     {
         Id = trainee.Id;
         Name = trainee.Name;
         Surname = trainee.Surname;
         Gender = trainee.Gender;
+        DateOfBirth = trainee.DateOfBirth;
         Email = trainee.Email;
         PhoneNumber = trainee.PhoneNumber;
-        DateOfBirth = trainee.DateOfBirth;
-        InternshipDirection = internshipDirection;
-        CurrentProject = currentProject;
+        InternshipDirectionId = trainee.InternshipDirectionId;
+        CurrentProjectId = trainee.CurrentProjectId;
+        InternshipDirectionName = directionName;
+        CurrentProjectName = projectName;
+    }
+
+    public TraineeDto()
+    {
+        
     }
 }

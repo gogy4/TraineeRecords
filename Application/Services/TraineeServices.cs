@@ -13,7 +13,7 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         if (!result.IsValid)
             throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
 
-        var ids = await resourceServices.GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
+        var ids = await resourceServices.GetIds(traineeDto.InternshipDirectionName, traineeDto.CurrentProjectName);
         await resourceServices.ChangeCountTrainees(null, null, ids.internshipDirectionId, ids.currentProjectId);
 
         var trainee = new Trainee(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email,
@@ -22,64 +22,67 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         await repository.AddAsync(trainee);
     }
 
-
     public async Task Edit(TraineeDto traineeDto)
     {
+        ArgumentNullException.ThrowIfNull(traineeDto);
+        if (traineeDto.Id == Guid.Empty) throw new ArgumentNullException("Такого стажера не существует");
+
         var validator = new TraineeCreateValidator(this);
         var result = await validator.ValidateAsync(traineeDto);
         if (!result.IsValid)
             throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
         var trainee = await GetById(traineeDto.Id);
         var oldIds = (trainee.CurrentProjectId, trainee.InternshipDirectionId);
-        var newIds = await resourceServices.GetIds(traineeDto.InternshipDirection, traineeDto.CurrentProject);
+        var newIds = (traineeDto.CurrentProjectId, traineeDto.InternshipDirectionId);
         if (oldIds != newIds)
             await resourceServices.ChangeCountTrainees(oldIds.Item2,
-                oldIds.Item1, newIds.internshipDirectionId, newIds.currentProjectId);
+                oldIds.Item1, newIds.InternshipDirectionId, newIds.CurrentProjectId);
 
 
         trainee.Edit(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email, traineeDto.PhoneNumber,
-            traineeDto.DateOfBirth, newIds.internshipDirectionId, newIds.currentProjectId);
+            traineeDto.DateOfBirth, newIds.InternshipDirectionId, newIds.CurrentProjectId);
 
         await repository.UpdateAsync(trainee);
     }
 
 
-    public async Task<List<TraineeListDto>> GetByFilter(string directionFilter, string currentProjectId)
+    public async Task<List<TraineeDto>> GetByFilter(string directionFilter, string currentProjectId)
     {
         var (projectId, directionId) = await resourceServices.GetIds(directionFilter, currentProjectId);
         return (await repository.GetByResourceIds(directionId, projectId))
-            .Select(t => new TraineeListDto(t))
+            .Select(t => new TraineeDto(t))
             .ToList();
     }
 
-    public async Task<Dictionary<Guid, List<TraineeListDto>>> GetByDirection(List<InternshipDirectionDto> directions)
+    public async Task<Dictionary<Guid, List<TraineeDto>>> GetByDirection(params Guid[] directionIds)
     {
-        var traineeList = new Dictionary<Guid, List<TraineeListDto>>();
-        foreach (var direction in directions)
+        var traineeList = new Dictionary<Guid, List<TraineeDto>>();
+        foreach (var directionId in directionIds)
         {
-            var trainee = (await repository.GetByResourceIds(direction.Id, Guid.Empty))
-                .Select(t => new TraineeListDto(t))
+            var trainee = (await repository.GetByResourceIds(directionId, Guid.Empty))
+                .Select(t => new TraineeDto(t))
                 .ToList();
-            traineeList[direction.Id] = trainee;
+            traineeList[directionId] = trainee;
         }
 
         return traineeList;
     }
 
-    public async Task<Dictionary<Guid, List<TraineeListDto>>> GetByProject(List<CurrentProjectDto> projects)
+    public async Task<Dictionary<Guid, List<TraineeDto>>> GetByProject(params Guid[] projectIds)
     {
-        var traineeList = new Dictionary<Guid, List<TraineeListDto>>();
-        foreach (var project in projects)
+        var traineeList = new Dictionary<Guid, List<TraineeDto>>();
+        foreach (var projectId in projectIds)
         {
-            var trainee = (await repository.GetByResourceIds(Guid.Empty, project.Id))
-                .Select(t => new TraineeListDto(t))
+            var trainee = (await repository.GetByResourceIds(Guid.Empty, projectId))
+                .Select(t => new TraineeDto(t))
                 .ToList();
             ;
-            traineeList[project.Id] = trainee;
+            traineeList[projectId] = trainee;
         }
 
         return traineeList;
     }
+    
 
     private async Task<Trainee> GetById(Guid traineeId)
     {
@@ -98,10 +101,10 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         return trainee is null || trainee.Id == traineeId;
     }
 
-    public async Task<List<TraineeListDto>> GetAll()
+    public async Task<List<TraineeDto>> GetAll()
     {
         return (await repository.GetAllAsync())
-            .Select(t => new TraineeListDto(t))
+            .Select(t => new TraineeDto(t))
             .ToList();
     }
 
@@ -121,5 +124,23 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         
         var traineeDto = new TraineeDto(trainee, project, direction);
         return (resourcePropertiesDto, traineeDto);
+    }
+
+    public async Task CreateResource(Guid traineeId, Guid resourceId, string resourceType)
+    {
+        var trainee = await GetById(traineeId);
+        var traineeDto = new TraineeDto(trainee);
+
+        switch (resourceType)
+        {
+            case "Direction":
+                traineeDto.InternshipDirectionId = resourceId;
+                break;
+            case "Project":
+                traineeDto.CurrentProjectId = resourceId;
+                break;
+        }
+        
+        await Edit(traineeDto);
     }
 }

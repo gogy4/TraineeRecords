@@ -4,28 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApplication1.Controllers;
 
 [Route("CreateNewResource")]
-public class CreateNewResourceController : Controller
+public class CreateNewResourceController(ResourceServices resourceServices) : Controller
 {
-    private readonly ResourceServices _resourceServices;
-
-    public CreateNewResourceController(ResourceServices resourceServices)
-    {
-        _resourceServices = resourceServices;
-    }
-
     [HttpPost]
     [Route("AddInternshipDirection")]
     public async Task<IActionResult> AddInternshipDirection([FromBody] string newDirection)
     {
-        await _resourceServices.CreateInternshipDirection(newDirection);
-        return RedirectToAction("Index");
+        var directionId = await resourceServices.CreateInternshipDirection(newDirection);
+        return Ok(new {id = directionId}); 
     }
 
     [HttpPost]
     [Route("AddCurrentProject")]
     public async Task<IActionResult> AddCurrentProject([FromBody] string newProject)
     {
-        await _resourceServices.CreateCurrentProject(newProject);
-        return RedirectToAction("Index");
+        var projectId = await resourceServices.CreateCurrentProject(newProject);
+        return Ok(new {id = projectId}); 
     }
 }

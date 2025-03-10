@@ -42,9 +42,10 @@ public class CurrentProjectRepository(AppDbContext context) : ICurrentProjectRep
             .ToListAsync();
     }
 
-    public async Task DeleteAsync(CurrentProject currentProject)
+    public async Task DeleteAsync(Guid id)
     {
-        context.CurrentProjects.Remove(currentProject);
+        var project = await GetByIdAsync(id);
+        context.CurrentProjects.Remove(project);
         await context.SaveChangesAsync();
     }
 }

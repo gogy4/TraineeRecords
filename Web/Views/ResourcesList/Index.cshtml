@@ -6,6 +6,13 @@
 
 <h2>Список направлений и проектов</h2>
 
+<div class="mb-3">
+    <a href="/CreateResource?resourceType=Project" class="btn btn-success">Создать проект</a>
+    <a href="/CreateResource?resourceType=Direction" class="btn btn-success">Создать направление</a>
+    <a href="/DeleteResource?resourceType=Project" class="btn btn-danger">Удалить проект</a>
+    <a href="/DeleteResource?resourceType=Direction" class="btn btn-danger">Удалить направление</a>
+</div>
+
 <form method="get" asp-action="Index" id="searchForm">
     <input type="text" name="searchQuery" placeholder="Поиск..." value="@Model.SearchQuery"/>
     <input type="hidden" name="activeTab" id="activeTab" value="@Model.ActiveTab"/>
@@ -72,7 +79,7 @@
                                         Почта: @trainee.Email <br/>
                                         Номер телефона: @(trainee.PhoneNumber ?? "не указан")<br/>
                                     </li>
-                                    
+
                                     i++;
                                 }
                             }
@@ -131,7 +138,7 @@
                                         Почта: @trainee.Email <br/>
                                         Номер телефона: @(trainee.PhoneNumber ?? "не указан")<br/>
                                     </li>
-                                    
+
                                     i++;
                                 }
                             }
@@ -247,4 +254,3 @@
         }
     </script>
 }
-

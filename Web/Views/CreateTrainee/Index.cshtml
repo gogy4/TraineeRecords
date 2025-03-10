@@ -54,29 +54,29 @@
     </div>
 
     <div>
-        <label for="internshipDirection">Направление стажировки:</label>
-        <select id="internshipDirection" name="InternshipDirection" required>
+        <label for="internshipDirectionName">Направление стажировки:</label>
+        <select id="internshipDirectionName" name="InternshipDirectionName" required>
             <option value="">Выберите направление</option>
             @foreach (var direction in Model.InternshipDirections)
             {
                 <option value="@direction">@direction</option>
             }
         </select>
-        <input type="text" id="newInternshipDirection" placeholder="Добавить новое направление" />
-        <button type="button" id="addInternshipDirection">+</button>
+        <input type="text" id="newInternshipDirectionName" placeholder="Добавить новое направление" />
+        <button type="button" id="addInternshipDirectionName">+</button>
     </div>
 
     <div>
-        <label for="currentProject">Текущий проект:</label>
-        <select id="currentProject" name="CurrentProject" required>
+        <label for="currentProjectName">Текущий проект:</label>
+        <select id="currentProjectName" name="CurrentProjectName" required>
             <option value="">Выберите проект</option>
             @foreach (var project in Model.Projects)
             {
                 <option value="@project">@project</option>
             }
         </select>
-        <input type="text" id="newCurrentProject" placeholder="Добавить новый проект" />
-        <button type="button" id="addCurrentProject">+</button>
+        <input type="text" id="newCurrentProjectName" placeholder="Добавить новый проект" />
+        <button type="button" id="addCurrentProjectName">+</button>
     </div>
 
     <button type="submit">Создать стажера</button>
@@ -94,34 +94,34 @@
         return response;
     }
 
-    document.getElementById("addInternshipDirection").addEventListener("click", async function() {
-        var newDirection = document.getElementById("newInternshipDirection").value.trim();
+    document.getElementById("addInternshipDirectionName").addEventListener("click", async function() {
+        var newDirection = document.getElementById("newInternshipDirectionName").value.trim();
         if (newDirection) {
             let response = await postData('/CreateNewResource/AddInternshipDirection', newDirection); 
             if (response) {
-                var select = document.getElementById("internshipDirection");
+                var select = document.getElementById("internshipDirectionName");
                 var option = document.createElement("option");
                 option.value = newDirection;
                 option.textContent = newDirection;
                 select.appendChild(option);
                 select.value = newDirection;
-                document.getElementById("newInternshipDirection").value = "";
+                document.getElementById("newInternshipDirectionName").value = "";
             }
         }
     });
 
-    document.getElementById("addCurrentProject").addEventListener("click", async function() {
-        var newProject = document.getElementById("newCurrentProject").value.trim();
+    document.getElementById("addCurrentProjectName").addEventListener("click", async function() {
+        var newProject = document.getElementById("newCurrentProjectName").value.trim();
         if (newProject) {
             let response = await postData('/CreateNewResource/AddCurrentProject', newProject);  
             if (response) {
-                var select = document.getElementById("currentProject");
+                var select = document.getElementById("currentProjectName");
                 var option = document.createElement("option");
                 option.value = newProject;
                 option.textContent = newProject;
                 select.appendChild(option);
                 select.value = newProject;
-                document.getElementById("newCurrentProject").value = "";
+                document.getElementById("newCurrentProjectName").value = "";
             }
         }
     });

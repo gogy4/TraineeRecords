@@ -42,9 +42,10 @@ public class InternshipDirectionRepository(AppDbContext context) : IInternshipDi
             .ToListAsync();
     }
 
-    public async Task DeleteAsync(InternshipDirection direction)
+    public async Task DeleteAsync(Guid directionId)
     {
-        context.Remove(direction);
+        var direction = await GetByIdAsync(directionId);
+        context.InternshipDirections.Remove(direction);
         await context.SaveChangesAsync();
     }
 }

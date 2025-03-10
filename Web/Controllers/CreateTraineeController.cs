@@ -3,7 +3,7 @@ using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
-[Route("CreateTrainee")]
+[Route("")]
 public class CreateTraineeController(TraineeServices traineeServices, ResourceServices resourceServices)
     : Controller
 {
@@ -32,21 +32,5 @@ public class CreateTraineeController(TraineeServices traineeServices, ResourceSe
             TempData["Errors"] = e.Message;
             return RedirectToAction("Index");
         }
-    }
-    
-    [HttpPost]
-    [Route("AddInternshipDirection")]
-    public async Task<IActionResult> AddInternshipDirection([FromBody] string newDirection)
-    {
-        await resourceServices.CreateInternshipDirection(newDirection);
-        return RedirectToAction("Index");
-    }
-
-    [HttpPost]
-    [Route("AddCurrentProject")]
-    public async Task<IActionResult> AddCurrentProject([FromBody] string newProject)
-    {
-        await resourceServices.CreateCurrentProject(newProject);
-        return RedirectToAction("Index");
     }
 }

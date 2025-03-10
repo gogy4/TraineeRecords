@@ -63,9 +63,10 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
     }
 
 
-    public async Task DeleteAsync(Trainee trainee)
+    public async Task DeleteAsync(Guid id)
     {
-        context.Remove(trainee);
+        var trainee = await GetByIdAsync(id);
+        context.Trainees.Remove(trainee);
         await context.SaveChangesAsync();
     }
 }

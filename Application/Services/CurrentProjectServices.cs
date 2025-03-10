@@ -5,10 +5,11 @@ namespace Application.Services;
 
 public class CurrentProjectServices(ICurrentProjectRepository repository)
 {
-    public async Task Create(string name)
+    public async Task<Guid> Create(string name)
     {
         var project = new CurrentProject(name);
         await repository.AddAsync(project);
+        return project.Id;
     }
 
     public async Task<CurrentProject> GetByName(string name)
@@ -21,6 +22,11 @@ public class CurrentProjectServices(ICurrentProjectRepository repository)
     public async Task<CurrentProject> GetById(Guid? id)
     {
         return await repository.GetByIdAsync(id);
+    }
+
+    public async Task Delete(Guid id)
+    {
+        await repository.DeleteAsync(id);
     }
 
     public async Task<List<CurrentProject>> GetByFilter(string filter)

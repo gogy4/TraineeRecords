@@ -2,16 +2,9 @@
 
 namespace Application.Dto;
 
-public class InternshipDirectionDto
+public class InternshipDirectionDto(InternshipDirection internshipDirection)
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public int CountTrainees { get; set; }
-
-    public InternshipDirectionDto(InternshipDirection internshipDirection)
-    {
-        Id = internshipDirection.Id;
-        Name = internshipDirection.Name;
-        CountTrainees = internshipDirection.CountTrainees;
-    }
+    public Guid Id { get; set; } = internshipDirection.Id;
+    public string Name { get; set; } = internshipDirection.Name;
+    public int CountTrainees { get; set; } = internshipDirection.CountTrainees;
 }

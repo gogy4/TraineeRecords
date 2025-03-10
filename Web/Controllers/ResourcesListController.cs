@@ -12,8 +12,12 @@ public class ResourcesListController(TraineeServices traineeServices, ResourceSe
         string sortOrder = "name", int page = 1, int pageSize = 5)
     {
         var result = await resourceServices.GetFilteredSortedPaged(searchQuery, sortOrder, page, pageSize);
-        var traineeByDirection = await traineeServices.GetByDirection(result.Directions);
-        var traineeByProject = await traineeServices.GetByProject(result.Projects);
+        var traineeByDirection = await traineeServices.GetByDirection(result.Directions
+            .Select(d=>d.Id)
+            .ToArray());
+        var traineeByProject = await traineeServices.GetByProject(result.Projects
+            .Select(p=>p.Id)
+            .ToArray());
 
         var model = new ResourcesListViewModel(
             activeTab, searchQuery, sortOrder,

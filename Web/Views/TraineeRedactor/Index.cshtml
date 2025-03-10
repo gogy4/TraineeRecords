@@ -48,21 +48,21 @@
     </div>
 
     <div class="form-group">
-        <label for="internshipDirection">Направление стажировки</label>
-        <select asp-for="Trainee.InternshipDirection" id="internshipDirection" class="form-control">
+        <label for="internshipDirectionName">Направление стажировки</label>
+        <select asp-for="Trainee.InternshipDirectionName" id="internshipDirectionName" class="form-control">
             <option value="">Выберите направление</option>
             @foreach (var direction in Model.InternshipDirections)
             {
                 <option value="@direction">@direction</option>
             }
         </select>
-        <input type="text" id="newInternshipDirection" class="form-control mt-2" placeholder="Добавить новое направление" />
-        <button type="button" id="addInternshipDirection" class="btn btn-success btn-sm mt-1">+</button>
+        <input type="text" id="newInternshipDirectionName" class="form-control mt-2" placeholder="Добавить новое направление" />
+        <button type="button" id="addInternshipDirectionName" class="btn btn-success btn-sm mt-1">+</button>
     </div>
 
     <div class="form-group">
         <label for="currentProject">Текущий проект</label>
-        <select asp-for="Trainee.CurrentProject" id="currentProject" class="form-control">
+        <select asp-for="Trainee.CurrentProjectName" id="currentProject" class="form-control">
             <option value="">Выберите проект</option>
             @foreach (var project in Model.Projects)
             {

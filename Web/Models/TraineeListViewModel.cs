@@ -5,11 +5,11 @@ namespace WebApplication1.Models;
 
 public class TraineeListViewModel
 {
-    public List<TraineeListDto> Trainees { get; set; }
+    public List<TraineeDto> Trainees { get; set; }
     public Dictionary<Guid, (string direction, string project)> TraineeResources { get; set; } = new();
 
 
-    public TraineeListViewModel(List<TraineeListDto> trainees, ResourcePropertiesDto resourceProperties)
+    public TraineeListViewModel(List<TraineeDto> trainees, ResourcePropertiesDto resourceProperties)
     {
         Trainees = trainees;
         InitTraineeResources(resourceProperties);

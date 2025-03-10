@@ -64,14 +64,14 @@ public class ResourceServices(
         return (projects, directions);
     }
 
-    public async Task CreateInternshipDirection(string internshipDirectionName)
+    public async Task<Guid> CreateInternshipDirection(string internshipDirectionName)
     {
-        await internshipDirectionsService.Create(internshipDirectionName);
+        return await internshipDirectionsService.Create(internshipDirectionName);
     }
 
-    public async Task CreateCurrentProject(string projectName)
+    public async Task<Guid> CreateCurrentProject(string projectName)
     {
-        await currentProjectServices.Create(projectName);
+        return await currentProjectServices.Create(projectName);
     }
 
     public async Task<(Guid currentProjectId, Guid internshipDirectionId)> GetIds(string internshipDirectionName,
@@ -145,4 +145,5 @@ public class ResourceServices(
         var modelDto = new ResourcePropertiesDto(projects, directions, projectsName, directionsName);
         return modelDto;
     }
+    
 }

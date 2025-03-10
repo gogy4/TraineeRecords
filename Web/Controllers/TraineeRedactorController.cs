@@ -5,11 +5,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
 
-public class TraineeRedactorController(
-    TraineeServices traineeServices,
-    CurrentProjectServices projectServices,
-    InternshipDirectionsServices directionsServices,
-    ResourceServices resourceServices) : Controller
+public class TraineeRedactorController(TraineeServices traineeServices) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(Guid traineeId)

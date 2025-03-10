@@ -2,16 +2,9 @@
 
 namespace Application.Dto;
 
-public class CurrentProjectDto
+public class CurrentProjectDto(CurrentProject currentProject)
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public int CountTrainees { get; set; }
-
-    public CurrentProjectDto(CurrentProject currentProject)
-    {
-        Id = currentProject.Id;
-        Name = currentProject.Name;
-        CountTrainees = currentProject.CountTrainees;
-    }
+    public Guid Id { get; set; } = currentProject.Id;
+    public string Name { get; set; } = currentProject.Name;
+    public int CountTrainees { get; set; } = currentProject.CountTrainees;
 }
