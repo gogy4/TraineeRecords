@@ -14,7 +14,8 @@
                 <option value="">Все направления</option>
                 @foreach (var direction in Model.TraineeResources.Values)
                 {
-                    <option value="@direction.direction" selected="@(string.Equals(ViewBag.SelectedDirection, direction.direction, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
+                    <option value="@direction.direction"
+                            selected="@(string.Equals(ViewBag.SelectedDirection, direction.direction, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
                         @direction.direction
                     </option>
                 }
@@ -27,7 +28,8 @@
                 <option value="">Все проекты</option>
                 @foreach (var project in Model.TraineeResources.Values)
                 {
-                    <option value="@project.project" selected="@(string.Equals(ViewBag.SelectedProject, project.project, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
+                    <option value="@project.project"
+                            selected="@(string.Equals(ViewBag.SelectedProject, project.project, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
                         @project.project
                     </option>
                 }
@@ -63,7 +65,8 @@
                 <td>@Model.TraineeResources[Model.Trainees[i].Id].direction</td>
                 <td>@Model.TraineeResources[Model.Trainees[i].Id].project</td>
                 <td>
-                    <a href="@Url.Action("Index", "TraineeRedactor", new { traineeId = Model.Trainees[i].Id })" class="btn btn-info btn-sm">Подробнее</a>
+                    <a href="@Url.Action("Index", "TraineeRedactor", new { traineeId = Model.Trainees[i].Id })"
+                       class="btn btn-info btn-sm">Подробнее</a>
                 </td>
 
             </tr>

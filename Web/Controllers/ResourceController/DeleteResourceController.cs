@@ -4,7 +4,8 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
 
-public class DeleteResourceController(DeleteResourceService deleteResourceService, ResourceServices resourceServices) : Controller
+public class DeleteResourceController(DeleteResourceService deleteResourceService, ResourceServices resourceServices)
+    : Controller
 {
     public async Task<IActionResult> Index(string resourceType)
     {
@@ -13,21 +14,7 @@ public class DeleteResourceController(DeleteResourceService deleteResourceServic
             TempData["Success"] as string, projects: resources.projects, directions: resources.directions);
         return View(model);
     }
+    
 
-    [HttpPost]
-    public async Task<IActionResult> Delete(Guid id, string resourceType)
-    {
-        var success = resourceType == "Direction" ? "Направление успешно удалено" : "Проект успешно удален";
-        try
-        {
-            await deleteResourceService.DeleteResource(id, resourceType);
-            TempData["Success"] = success;
-            return RedirectToAction("Index", new { resourceType });
-        }
-        catch (ArgumentException e)
-        {
-            TempData["Error"] = e.Message;
-            return RedirectToAction("Index", new { resourceType });
-        }
-    }
+    
 }

@@ -12,7 +12,8 @@ public class CreateTraineeController(TraineeServices traineeServices, ResourceSe
     public async Task<IActionResult> Index()
     {
         var resourceProperties = await resourceServices.GetResourceProperties();
-        var traineeViewModel = new CreateTraineeViewModel(resourceProperties.DirectionNames.Values.ToList(), resourceProperties.ProjectNames.Values.ToList(), 
+        var traineeViewModel = new TraineeViewModel(resourceProperties.DirectionNames.Values.ToList(),
+            resourceProperties.ProjectNames.Values.ToList(),
             TempData["Errors"] as string, TempData["Success"] as string);
         return View(traineeViewModel);
     }

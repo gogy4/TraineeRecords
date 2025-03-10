@@ -21,12 +21,15 @@ public class TraineeListViewModel
         var directionNames = resourceProperties.DirectionNames;
 
         foreach (var trainee in Trainees)
-            TraineeResources[trainee.Id] = (directionNames[trainee.InternshipDirectionId],
-                projectNames[trainee.CurrentProjectId]);
+        {
+            var directionName = directionNames.GetValueOrDefault(trainee.InternshipDirectionId);
+            var projectName = projectNames.GetValueOrDefault(trainee.CurrentProjectId);
+
+            TraineeResources[trainee.Id] = (directionName, projectName);
+        }
     }
 
     public TraineeListViewModel()
     {
-        
     }
 }

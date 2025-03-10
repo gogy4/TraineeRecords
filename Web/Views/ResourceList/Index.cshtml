@@ -3,14 +3,25 @@
 @{
     ViewData["Title"] = "Список направлений и проектов";
 }
+@if (!string.IsNullOrEmpty(Model.Errors))
+{
+    <div class="alert alert-danger">@Model.Errors</div>
+}
 
+@if (!string.IsNullOrEmpty(Model.Success))
+{
+    <div class="alert alert-success">@Model.Success</div>
+}
 <h2>Список направлений и проектов</h2>
 
 <div class="mb-3">
-    <a href="/CreateResource?resourceType=Project" class="btn btn-success">Создать проект</a>
-    <a href="/CreateResource?resourceType=Direction" class="btn btn-success">Создать направление</a>
-    <a href="/DeleteResource?resourceType=Project" class="btn btn-danger">Удалить проект</a>
-    <a href="/DeleteResource?resourceType=Direction" class="btn btn-danger">Удалить направление</a>
+    @if (Model.ActiveTab == "projects")
+    {
+        <a href="/CreateResource?resourceType=Project" class="btn btn-success">Создать проект</a>
+    }
+    else{    
+        <a href="/CreateResource?resourceType=Direction" class="btn btn-success">Создать направление</a>
+    }
 </div>
 
 <form method="get" asp-action="Index" id="searchForm">
@@ -87,10 +98,24 @@
                     </td>
                     <td>
                         <a href="@Url.Action("Index", "EditResource", new { resourceId = project.Id, resourceType = "Project" })"
-                           class="btn btn-warning">✏ Изменить стажеров</a>
+                           class="btn btn-warning">✏ Изменить</a>
                     </td>
 
+                    <td>
+                        <form method="post" action="@Url.Action("Delete", "ResourceList")"
+                              onsubmit="return confirm('Вы уверены, что хотите удалить этот ресурс?');">
+                            <input type="hidden" name="resourceId" value="@project.Id" />
+                            <input type="hidden" name="resourceType" value="Project" />
+                            <input type="hidden" name="activeTab" value="@Model.ActiveTab" />
+                            <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                            <input type="hidden" name="sortOrder" value="@Model.SortOrder" />
+                            <input type="hidden" name="page" value="@Model.CurrentPage" />
+                            <input type="hidden" name="pageSize" value="@Model.PageSize" />
 
+                            <button type="submit" class="btn btn-danger">🗑 Удалить</button>
+                        </form>
+
+                    </td>
                 </tr>
             }
             </tbody>
@@ -151,9 +176,24 @@
                     </td>
                     <td>
                         <a href="@Url.Action("Index", "EditResource", new { resourceId = direction.Id, resourceType = "Direction" })"
-                           class="btn btn-warning">✏ Изменить стажеров</a>
+                           class="btn btn-warning">✏ Изменить</a>
                     </td>
+                    <td>
+                        <form method="post" action="@Url.Action("Delete", "ResourceList")"
+                              onsubmit="return confirm('Вы уверены, что хотите удалить этот ресурс?');">
+                            <input type="hidden" name="resourceId" value="@direction.Id" />
+                            <input type="hidden" name="resourceType" value="Project" />
+                            <input type="hidden" name="activeTab" value="@Model.ActiveTab" />
+                            <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                            <input type="hidden" name="sortOrder" value="@Model.SortOrder" />
+                            <input type="hidden" name="page" value="@Model.CurrentPage" />
+                            <input type="hidden" name="pageSize" value="@Model.PageSize" />
 
+                            <button type="submit" class="btn btn-danger">🗑 Удалить</button>
+                        </form>
+
+
+                    </td>
                 </tr>
             }
             </tbody>

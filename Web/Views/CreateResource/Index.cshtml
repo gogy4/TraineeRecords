@@ -37,8 +37,8 @@
                placeholder="@(Model.ResourceType == "Direction" ? "Введите направление стажировки" : "Введите название проекта")"/>
     </div>
 
-    <input type="hidden" id="resourceType" name="resourceType" value="@Model.ResourceType" />
-    <input type="hidden" id="traineeId" name="traineeId" value="" />
+    <input type="hidden" id="resourceType" name="resourceType" value="@Model.ResourceType"/>
+    <input type="hidden" id="traineeId" name="traineeId" value=""/>
 
     <input type="hidden" id="resourceId" name="resourceId"/>
 
@@ -59,7 +59,7 @@
         event.preventDefault();
 
         var newResource = document.getElementById("resourceName").value.trim();
-        var resourceType = "@Model.ResourceType";  
+        var resourceType = "@Model.ResourceType";
 
         if (!newResource) {
             alert("Введите @(Model.ResourceType == "Direction" ? "направление стажировки" : "проект для стажировки")!");
@@ -73,7 +73,7 @@
         } else if (resourceType === "Project") {
             url = '/CreateNewResource/AddCurrentProject';
         }
-        
+
 
         try {
             let response = await postData(url, newResource);

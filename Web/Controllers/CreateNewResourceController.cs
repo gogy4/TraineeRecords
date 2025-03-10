@@ -11,7 +11,7 @@ public class CreateNewResourceController(ResourceServices resourceServices) : Co
     public async Task<IActionResult> AddInternshipDirection([FromBody] string newDirection)
     {
         var directionId = await resourceServices.CreateInternshipDirection(newDirection);
-        return Ok(new {id = directionId}); 
+        return Ok(new { id = directionId });
     }
 
     [HttpPost]
@@ -19,6 +19,6 @@ public class CreateNewResourceController(ResourceServices resourceServices) : Co
     public async Task<IActionResult> AddCurrentProject([FromBody] string newProject)
     {
         var projectId = await resourceServices.CreateCurrentProject(newProject);
-        return Ok(new {id = projectId}); 
+        return Ok(new { id = projectId });
     }
 }

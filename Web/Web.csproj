@@ -8,20 +8,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Application\Application.csproj" />
-      <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+        <ProjectReference Include="..\Application\Application.csproj"/>
+        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Views\Resource\" />
+        <Folder Include="Views\Resource\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\EditResourceName\Index.cshtml" />
     </ItemGroup>
 
 </Project>

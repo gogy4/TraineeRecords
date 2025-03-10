@@ -11,14 +11,15 @@ public class TraineeRedactorController(TraineeServices traineeServices) : Contro
     public async Task<IActionResult> Index(Guid traineeId)
     {
         var (resourcesProperties, traineeDto) = await traineeServices.GetTraineeWithResources(traineeId);
-        var model = new EditTraineeViewModel(traineeDto, resourcesProperties.DirectionNames.Values.ToList(), resourcesProperties.ProjectNames.Values.ToList(), 
-            TempData["Errors"] as string, TempData["Success"] as string);
-        
+        var model = new TraineeViewModel(resourcesProperties.DirectionNames.Values.ToList(),
+            resourcesProperties.ProjectNames.Values.ToList(),
+            TempData["Errors"] as string, TempData["Success"] as string, traineeDto);
+
         return View(model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(EditTraineeViewModel editTrainee)
+    public async Task<IActionResult> Edit(TraineeViewModel editTrainee)
     {
         var trainee = editTrainee.Trainee;
         try

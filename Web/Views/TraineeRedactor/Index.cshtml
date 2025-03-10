@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model EditTraineeViewModel
+@model TraineeViewModel
 
 @if (!string.IsNullOrEmpty(Model.Success))
 {
@@ -15,12 +15,12 @@
 <form asp-controller="TraineeRedactor" asp-action="Edit" method="post">
     <div class="form-group">
         <label for="Name">Имя</label>
-        <input asp-for="Trainee.Name" class="form-control" id="Name" />
+        <input asp-for="Trainee.Name" class="form-control" id="Name"/>
     </div>
 
     <div class="form-group">
         <label for="Surname">Фамилия</label>
-        <input asp-for="Trainee.Surname" class="form-control" id="Surname" />
+        <input asp-for="Trainee.Surname" class="form-control" id="Surname"/>
     </div>
 
     <div class="form-group">
@@ -34,17 +34,17 @@
 
     <div class="form-group">
         <label for="Email">Email</label>
-        <input asp-for="Trainee.Email" class="form-control" id="Email" />
+        <input asp-for="Trainee.Email" class="form-control" id="Email"/>
     </div>
 
     <div class="form-group">
         <label for="PhoneNumber">Номер телефона</label>
-        <input asp-for="Trainee.PhoneNumber" class="form-control" id="PhoneNumber" />
+        <input asp-for="Trainee.PhoneNumber" class="form-control" id="PhoneNumber"/>
     </div>
 
     <div class="form-group">
         <label for="DateOfBirth">Дата рождения</label>
-        <input asp-for="Trainee.DateOfBirth" class="form-control" id="DateOfBirth" type="date" />
+        <input asp-for="Trainee.DateOfBirth" class="form-control" id="DateOfBirth" type="date"/>
     </div>
 
     <div class="form-group">
@@ -56,7 +56,8 @@
                 <option value="@direction">@direction</option>
             }
         </select>
-        <input type="text" id="newInternshipDirectionName" class="form-control mt-2" placeholder="Добавить новое направление" />
+        <input type="text" id="newInternshipDirectionName" class="form-control mt-2"
+               placeholder="Добавить новое направление"/>
         <button type="button" id="addInternshipDirectionName" class="btn btn-success btn-sm mt-1">+</button>
     </div>
 
@@ -69,11 +70,11 @@
                 <option value="@project">@project</option>
             }
         </select>
-        <input type="text" id="newCurrentProject" class="form-control mt-2" placeholder="Добавить новый проект" />
+        <input type="text" id="newCurrentProject" class="form-control mt-2" placeholder="Добавить новый проект"/>
         <button type="button" id="addCurrentProject" class="btn btn-success btn-sm mt-1">+</button>
     </div>
 
-    <input type="hidden" asp-for="Trainee.Id" />
+    <input type="hidden" asp-for="Trainee.Id"/>
 
     <button type="submit" class="btn btn-primary">Сохранить изменения</button>
 </form>
@@ -82,14 +83,14 @@
     async function postData(url, data) {
         let response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
 
         return response;
     }
 
-    document.getElementById("addInternshipDirection").addEventListener("click", async function() {
+    document.getElementById("addInternshipDirection").addEventListener("click", async function () {
         var newDirection = document.getElementById("newInternshipDirection").value.trim();
         if (newDirection) {
             let response = await postData('/CreateNewResource/AddInternshipDirection', newDirection);
@@ -105,7 +106,7 @@
         }
     });
 
-    document.getElementById("addCurrentProject").addEventListener("click", async function() {
+    document.getElementById("addCurrentProject").addEventListener("click", async function () {
         var newProject = document.getElementById("newCurrentProject").value.trim();
         if (newProject) {
             let response = await postData('/CreateNewResource/AddCurrentProject', newProject);

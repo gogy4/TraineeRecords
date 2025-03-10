@@ -17,7 +17,7 @@ public class OperationResourceViewModel
     {
     }
 
-    public OperationResourceViewModel(string resourceType, string errors, string success, 
+    public OperationResourceViewModel(string resourceType, string errors, string success,
         List<TraineeDto> trainees = null, List<CurrentProjectDto> projects = null,
         List<InternshipDirectionDto> directions = null, Guid? resourceId = null, string resourceName = null)
     {

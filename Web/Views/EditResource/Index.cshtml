@@ -6,7 +6,7 @@
         : "Добавление стажера на текущий проект";
 }
 
-<h2>@(Model.ResourceType == "Direction" ? "Изменение участниокв на направление" : "Изменение участниокв на проект") @Model.ResourceName</h2>
+<h2>@(Model.ResourceType == "Direction" ? "Изменение участников на направление" : "Изменение участников на проект") @Model.ResourceName</h2>
 
 @if (!string.IsNullOrEmpty(Model.Errors))
 {
@@ -20,14 +20,13 @@
 
 <form method="post" asp-action="Edit">
     <div class="mb-3">
-        <label for="resourceId" class="form-label">
+        <label for="traineeId" class="form-label">
             @(Model.ResourceType == "Direction"
                 ? "Добавьте нового стажера на направление"
                 : "Добавьте нового стажера на проект") @Model.ResourceName
         </label>
         <select class="form-select" id="traineeId" name="traineeId">
-            <option value="">@(Model.ResourceType == "Direction" ? "Выберите стажера на направление" : 
-                                 "Выберите стажера на проект") @Model.ResourceName</option>
+            <option value="">@(Model.ResourceType == "Direction" ? "Выберите стажера на направление" : "Выберите стажера на проект") @Model.ResourceName</option>
             @foreach (var trainee in Model.Trainees)
             {
                 <option value="@trainee.Id">@trainee.Name</option>
@@ -38,4 +37,15 @@
     <input type="hidden" id="resourceType" name="resourceType" value="@Model.ResourceType"/>
     <input type="hidden" id="resourceId" name="resourceId" value="@Model.ResourceId"/>
     <button type="submit" class="btn btn-success">Применить</button>
+</form>
+
+<h3>Изменение имени @Model.ResourceName</h3>
+<form method="post" asp-action="EditName">
+    <div class="mb-3">
+        <label for="newName" class="form-label">Новое имя ресурса</label>
+        <input type="text" class="form-control" id="newName" name="newName" required />
+    </div>
+    <input type="hidden" name="resourceId" value="@Model.ResourceId" />
+    <input type="hidden" name="resourceType" value="@Model.ResourceType" />
+    <button type="submit" class="btn btn-primary">Изменить имя</button>
 </form>

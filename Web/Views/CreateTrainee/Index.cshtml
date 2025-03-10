@@ -1,4 +1,4 @@
-﻿@model CreateTraineeViewModel
+﻿@model TraineeViewModel
 
 @{
     ViewData["Title"] = "Создать нового стажера";
@@ -21,12 +21,12 @@
 
     <div>
         <label for="name">Имя:</label>
-        <input type="text" id="name" name="Name" required />
+        <input type="text" id="name" name="Name" required/>
     </div>
 
     <div>
         <label for="surname">Фамилия:</label>
-        <input type="text" id="surname" name="Surname" required />
+        <input type="text" id="surname" name="Surname" required/>
     </div>
 
     <div>
@@ -40,17 +40,17 @@
 
     <div>
         <label for="email">Email:</label>
-        <input type="email" id="email" name="Email" required />
+        <input type="email" id="email" name="Email" required/>
     </div>
 
     <div>
         <label for="phoneNumber">Номер телефона:</label>
-        <input type="text" id="phoneNumber" name="PhoneNumber" placeholder="+7XXXXXXXXXX" />
+        <input type="text" id="phoneNumber" name="PhoneNumber" placeholder="+7XXXXXXXXXX"/>
     </div>
 
     <div>
         <label for="dateOfBirth">Дата рождения:</label>
-        <input type="date" id="dateOfBirth" name="DateOfBirth" required />
+        <input type="date" id="dateOfBirth" name="DateOfBirth" required/>
     </div>
 
     <div>
@@ -62,7 +62,7 @@
                 <option value="@direction">@direction</option>
             }
         </select>
-        <input type="text" id="newInternshipDirectionName" placeholder="Добавить новое направление" />
+        <input type="text" id="newInternshipDirectionName" placeholder="Добавить новое направление"/>
         <button type="button" id="addInternshipDirectionName">+</button>
     </div>
 
@@ -75,7 +75,7 @@
                 <option value="@project">@project</option>
             }
         </select>
-        <input type="text" id="newCurrentProjectName" placeholder="Добавить новый проект" />
+        <input type="text" id="newCurrentProjectName" placeholder="Добавить новый проект"/>
         <button type="button" id="addCurrentProjectName">+</button>
     </div>
 
@@ -87,17 +87,17 @@
     async function postData(url, data) {
         let response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-        
+
         return response;
     }
 
-    document.getElementById("addInternshipDirectionName").addEventListener("click", async function() {
+    document.getElementById("addInternshipDirectionName").addEventListener("click", async function () {
         var newDirection = document.getElementById("newInternshipDirectionName").value.trim();
         if (newDirection) {
-            let response = await postData('/CreateNewResource/AddInternshipDirection', newDirection); 
+            let response = await postData('/CreateNewResource/AddInternshipDirection', newDirection);
             if (response) {
                 var select = document.getElementById("internshipDirectionName");
                 var option = document.createElement("option");
@@ -110,10 +110,10 @@
         }
     });
 
-    document.getElementById("addCurrentProjectName").addEventListener("click", async function() {
+    document.getElementById("addCurrentProjectName").addEventListener("click", async function () {
         var newProject = document.getElementById("newCurrentProjectName").value.trim();
         if (newProject) {
-            let response = await postData('/CreateNewResource/AddCurrentProject', newProject);  
+            let response = await postData('/CreateNewResource/AddCurrentProject', newProject);
             if (response) {
                 var select = document.getElementById("currentProjectName");
                 var option = document.createElement("option");
