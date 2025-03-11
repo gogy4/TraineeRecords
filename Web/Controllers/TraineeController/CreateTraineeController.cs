@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
 [Route("")]
-public class CreateTraineeController(TraineeServices traineeServices, ResourceServices resourceServices)
-    : Controller
+public class CreateTraineeController(TraineeServices traineeServices, ResourceServices resourceServices) : Controller
 {
     [HttpGet]
     [Route("")]

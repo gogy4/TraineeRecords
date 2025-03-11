@@ -47,21 +47,7 @@ public class TraineeRepository(AppDbContext context) : ITraineeRepository
     {
         return await context.Trainees.ToListAsync();
     }
-
-    public async Task<List<Trainee>> GetByProjectAsync(Guid projectId)
-    {
-        return await context.Trainees
-            .Where(t => t.CurrentProjectId == projectId)
-            .ToListAsync();
-    }
-
-    public async Task<List<Trainee>> GetByDirectionAsync(Guid directionId)
-    {
-        return await context.Trainees
-            .Where(t => t.InternshipDirectionId == directionId)
-            .ToListAsync();
-    }
-
+    
 
     public async Task DeleteAsync(Guid id)
     {

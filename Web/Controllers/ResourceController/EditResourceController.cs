@@ -5,45 +5,16 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
 
-public class EditResourceController(
-    TraineeServices traineeServices,
-    CurrentProjectServices currentProjectServices,
-    InternshipDirectionsServices internshipDirectionsServices, EditResourceNameService editResourceNameService,
-    DeleteResourceService deleteResourceService) : Controller
+public class EditResourceController(TraineeServices traineeServices, EditResourceNameService editResourceNameService) :
+    CreateEditResource(traineeServices)
 {
     public async Task<IActionResult> Index(Guid resourceId, string resourceType)
     {
         var trainees = await traineeServices.GetTraineeWithoutResource(resourceId, resourceType);
-        var resourceName = resourceType == "Direction"
-            ? (await internshipDirectionsServices.GetById(resourceId)).Name
-            : (await currentProjectServices.GetById(resourceId)).Name;
+        var resourceName = await editResourceNameService.GetResourceById(resourceId, resourceType);
         var model = new OperationResourceViewModel(resourceType, TempData["Error"] as string,
             TempData["Success"] as string, trainees, resourceId: resourceId, resourceName: resourceName);
         return View(model);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(Guid traineeId, Guid resourceId, string resourceType)
-    {
-        var success = "Стажеры успешно изменены";
-        if (traineeId == Guid.Empty)
-        {
-            TempData["Success"] = success;
-            return RedirectToAction("Index", new { resourceId, resourceType });
-        }
-
-        try
-        {
-            await traineeServices.CreateResource(traineeId, resourceId, resourceType);
-            TempData["Success"] = success;
-            return RedirectToAction("Index", new { resourceId, resourceType });
-        }
-
-        catch (ArgumentException e)
-        {
-            TempData["Errors"] = e.Message;
-            return RedirectToAction("Index", new { resourceId, resourceType });
-        }
     }
     
     public async Task<IActionResult> EditName(Guid resourceId, string resourceType, string newName)

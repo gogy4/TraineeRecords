@@ -1,6 +1,5 @@
-﻿using Domain.Entities;
-
-namespace Application.Services;
+﻿
+using Application.Services;
 
 public class DeleteResourceService(TraineeServices traineeServices, CurrentProjectServices currentProjectServices, InternshipDirectionsServices internshipDirectionsServices)
 {
@@ -26,4 +25,6 @@ public class DeleteResourceService(TraineeServices traineeServices, CurrentProje
         }
         else await DeleteProject(resourceId);
     }
+    
+    
 }

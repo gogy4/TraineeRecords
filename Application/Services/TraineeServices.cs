@@ -95,7 +95,7 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         return trainee is null || trainee.Id == traineeId;
     }
 
-    public async Task<bool> EmailHaveNot(string email, Guid traineeId)
+    public async Task<bool> EmailHaveNotUsed(string email, Guid traineeId)
     {
         var trainee = await repository.GetByEmailAsync(email);
         return trainee is null || trainee.Id == traineeId;
@@ -127,7 +127,7 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         return (resourcePropertiesDto, traineeDto);
     }
 
-    public async Task CreateResource(Guid traineeId, Guid resourceId, string resourceType)
+    public async Task EditTraineeResource(Guid traineeId, Guid resourceId, string resourceType)
     {
         var trainee = await GetById(traineeId);
         var traineeDto = new TraineeDto(trainee);

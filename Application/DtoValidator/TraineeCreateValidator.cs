@@ -29,7 +29,7 @@ namespace Application.DtoValidator
 
             RuleFor(x => x.Email)
                 .EmailAddress().WithMessage("Email не является действительным")
-                .MustAsync(async (trainee, email, token) => await traineeServices.EmailHaveNot(email, trainee.Id))
+                .MustAsync(async (trainee, email, token) => await traineeServices.EmailHaveNotUsed(email, trainee.Id))
                 .WithMessage("Данная почта уже зарегистрирована");
         }
     }

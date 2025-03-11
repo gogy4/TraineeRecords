@@ -4,7 +4,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
 
-public class CreateResourceController(TraineeServices traineeServices) : Controller
+public class CreateResourceController(TraineeServices traineeServices) : CreateEditResource(traineeServices)
 {
     public async Task<IActionResult> Index(string resourceType)
     {
@@ -12,30 +12,5 @@ public class CreateResourceController(TraineeServices traineeServices) : Control
         var model = new OperationResourceViewModel(resourceType, TempData["Errors"] as string,
             TempData["Success"] as string, trainee);
         return View(model);
-    }
-
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Guid traineeId, Guid resourceId, string resourceType)
-    {
-        var success = resourceType == "Direction" ? "Направление успешно создано" : "Проект успешно создан";
-        if (traineeId == Guid.Empty)
-        {
-            TempData["Success"] = success;
-            return RedirectToAction("Index", new { resourceType });
-        }
-
-        try
-        {
-            await traineeServices.CreateResource(traineeId, resourceId, resourceType);
-            TempData["Success"] = success;
-            return RedirectToAction("Index", new { resourceType });
-        }
-
-        catch (ArgumentException e)
-        {
-            TempData["Errors"] = e.Message;
-            return RedirectToAction("Index", new { resourceType });
-        }
     }
 }

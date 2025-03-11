@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers;
 
-public class ResourceListController(TraineeServices traineeServices, ResourceServices resourceServices, DeleteResourceService deleteResourceService) : Controller
+public class ResourceListController(TraineeServices traineeServices, ResourceServices resourceServices, 
+    DeleteResourceService deleteResourceService) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(string activeTab = "projects", string searchQuery = "",
@@ -34,7 +35,7 @@ public class ResourceListController(TraineeServices traineeServices, ResourceSer
     public async Task<IActionResult> Delete(Guid resourceId, string resourceType, string activeTab, string searchQuery, string sortOrder, int page, int pageSize)
     {
         var successMessage = resourceType == "Direction" ? "Направление успешно удалено" : "Проект успешно удален";
-    
+        var a = new CreateResourceController(traineeServices);
         try
         {
             await deleteResourceService.DeleteResource(resourceId, resourceType);

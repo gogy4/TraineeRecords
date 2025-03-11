@@ -19,11 +19,8 @@ public class TraineeListController(TraineeServices traineeServices, ResourceServ
     public async Task<IActionResult> Filter(string directionFilter, string projectFilter)
     {
         var filteredTrainees = await traineeServices.GetByFilter(directionFilter, projectFilter);
-        var resources = await resourceServices.GetResourceProperties(directionFilter, projectFilter);
-        ViewBag.SelectedDirection = directionFilter;
-        ViewBag.SelectedProject = projectFilter;
-
-        var model = new TraineeListViewModel(filteredTrainees, resources);
+        var resources = await resourceServices.GetResourceProperties();
+        var model = new TraineeListViewModel(filteredTrainees, resources, directionFilter, projectFilter);
         return View("Index", model);
     }
 }

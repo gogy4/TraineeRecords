@@ -12,11 +12,11 @@
             <label for="directionFilter">Направление</label>
             <select id="directionFilter" name="directionFilter" class="form-control">
                 <option value="">Все направления</option>
-                @foreach (var direction in Model.TraineeResources.Values)
+                @foreach (var direction in Model.InternshipDirections)
                 {
-                    <option value="@direction.direction"
-                            selected="@(string.Equals(ViewBag.SelectedDirection, direction.direction, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
-                        @direction.direction
+                    <option value="@direction"
+                            selected="@(string.Equals(Model.SelectedDirection, direction, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
+                        @direction
                     </option>
                 }
             </select>
@@ -26,11 +26,11 @@
             <label for="projectFilter">Проект</label>
             <select id="projectFilter" name="projectFilter" class="form-control">
                 <option value="">Все проекты</option>
-                @foreach (var project in Model.TraineeResources.Values)
+                @foreach (var project in Model.CurrentProjects)
                 {
-                    <option value="@project.project"
-                            selected="@(string.Equals(ViewBag.SelectedProject, project.project, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
-                        @project.project
+                    <option value="@project"
+                            selected="@(string.Equals(Model.SelectedProject, project, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">
+                        @project
                     </option>
                 }
             </select>
@@ -57,15 +57,15 @@
     <tbody>
     @if (Model.Trainees.Any())
     {
-        @for (var i = 0; i < Model.Trainees.Count; i++)
+        @foreach (var t in Model.Trainees)
         {
             <tr>
-                <td>@Model.Trainees[i].Name</td>
-                <td>@Model.Trainees[i].Surname</td>
-                <td>@Model.TraineeResources[Model.Trainees[i].Id].direction</td>
-                <td>@Model.TraineeResources[Model.Trainees[i].Id].project</td>
+                <td>@t.Name</td>
+                <td>@t.Surname</td>
+                <td>@Model.TraineeResources[t.Id].direction</td>
+                <td>@Model.TraineeResources[t.Id].project</td>
                 <td>
-                    <a href="@Url.Action("Index", "TraineeRedactor", new { traineeId = Model.Trainees[i].Id })"
+                    <a href="@Url.Action("Index", "TraineeRedactor", new { traineeId = t.Id })"
                        class="btn btn-info btn-sm">Подробнее</a>
                 </td>
 

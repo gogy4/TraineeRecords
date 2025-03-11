@@ -52,7 +52,7 @@ public class ResourceServices(
         }
     }
 
-    public async Task<(List<CurrentProjectDto> projects, List<InternshipDirectionDto> directions)> GetAll()
+    private async Task<(List<CurrentProjectDto> projects, List<InternshipDirectionDto> directions)> GetAll()
     {
         var projects = (await currentProjectServices.GetAll())
             .Select(p => new CurrentProjectDto(p))
