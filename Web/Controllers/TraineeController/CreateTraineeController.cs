@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
 [Route("")]
-public class CreateTraineeController(TraineeServices traineeServices, ResourceServices resourceServices) : Controller
+public class CreateTraineeController(TraineeService traineeService, ResourceService resourceService) : Controller
 {
     [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()
     {
-        var resourceProperties = await resourceServices.GetResourceProperties();
+        var resourceProperties = await resourceService.GetResourceProperties();
         var traineeViewModel = new TraineeViewModel(resourceProperties.DirectionNames.Values.ToList(),
             resourceProperties.ProjectNames.Values.ToList(),
             TempData["Errors"] as string, TempData["Success"] as string);
@@ -23,7 +23,7 @@ public class CreateTraineeController(TraineeServices traineeServices, ResourceSe
     {
         try
         {
-            await traineeServices.Create(traineeDto);
+            await traineeService.Create(traineeDto);
             TempData["Success"] = "Стажер успешно создан!";
             return RedirectToAction("Index");
         }

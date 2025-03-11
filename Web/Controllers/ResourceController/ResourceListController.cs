@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers;
 
-public class ResourceListController(TraineeServices traineeServices, ResourceServices resourceServices, 
+public class ResourceListController(TraineeService traineeService, ResourceService resourceService, 
     DeleteResourceService deleteResourceService) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(string activeTab = "projects", string searchQuery = "",
         string sortOrder = "name", int page = 1, int pageSize = 5)
     {
-        var result = await resourceServices.GetFilteredSortedPaged(searchQuery, sortOrder, page, pageSize);
-        var traineeByDirection = await traineeServices.GetByDirection(result.Directions
+        var result = await resourceService.GetFilteredSortedPaged(searchQuery, sortOrder, page, pageSize);
+        var traineeByDirection = await traineeService.GetByDirection(result.Directions
             .Select(d => d.Id)
             .ToArray());
-        var traineeByProject = await traineeServices.GetByProject(result.Projects
+        var traineeByProject = await traineeService.GetByProject(result.Projects
             .Select(p => p.Id)
             .ToArray());
 
@@ -35,7 +35,7 @@ public class ResourceListController(TraineeServices traineeServices, ResourceSer
     public async Task<IActionResult> Delete(Guid resourceId, string resourceType, string activeTab, string searchQuery, string sortOrder, int page, int pageSize)
     {
         var successMessage = resourceType == "Direction" ? "Направление успешно удалено" : "Проект успешно удален";
-        var a = new CreateResourceController(traineeServices);
+        var a = new CreateResourceController(traineeService);
         try
         {
             await deleteResourceService.DeleteResource(resourceId, resourceType);

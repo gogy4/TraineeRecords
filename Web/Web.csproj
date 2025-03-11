@@ -21,11 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Views\Resource\"/>
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\EditResourceName\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\DeleteResource\Index.cshtml" />
     </ItemGroup>
 
 </Project>

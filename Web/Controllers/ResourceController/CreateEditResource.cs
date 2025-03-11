@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers;
 
-public abstract class CreateEditResource(TraineeServices traineeServices) : Controller
+public abstract class CreateEditResource(TraineeService traineeService) : Controller
 {
     [HttpPost]
     public async Task<IActionResult> Operate(Guid traineeId, Guid resourceId, string resourceType)
@@ -18,7 +18,7 @@ public abstract class CreateEditResource(TraineeServices traineeServices) : Cont
 
         try
         {
-            await traineeServices.EditTraineeResource(traineeId, resourceId, resourceType);
+            await traineeService.EditTraineeResource(traineeId, resourceId, resourceType);
             TempData["Success"] = success;
             return RedirectToAction("Index", new { resourceId, resourceType });
         }

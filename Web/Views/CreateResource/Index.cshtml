@@ -5,6 +5,8 @@
     ViewBag.Title = "Создание ресурса";
 }
 
+<script src="js/createResource.js"></script>
+
 <h2>@(Model.ResourceType == "Direction" ? "Создание направления" : "Создание проекта")</h2>
 
 @if (Model.Errors != null)
@@ -45,50 +47,3 @@
     <button type="submit" class="btn btn-primary">Создать</button>
 </form>
 
-<script>
-    async function postData(url, data) {
-        let response = await fetch(url, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        return response;
-    }
-
-    document.querySelector("#createResourceForm").addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        var newResource = document.getElementById("resourceName").value.trim();
-        var resourceType = "@Model.ResourceType";
-
-        if (!newResource) {
-            alert("Введите @(Model.ResourceType == "Direction" ? "направление стажировки" : "проект для стажировки")!");
-            return;
-        }
-
-
-        let url = '';
-        if (resourceType === "Direction") {
-            url = '/CreateNewResource/AddInternshipDirection';
-        } else if (resourceType === "Project") {
-            url = '/CreateNewResource/AddCurrentProject';
-        }
-
-
-        try {
-            let response = await postData(url, newResource);
-
-            if (response.ok) {
-                const resource = await response.json();
-
-                document.getElementById("resourceId").value = resource.id;
-
-                this.submit();
-            } else {
-                alert("Ошибка при добавлении ресурса");
-            }
-        } catch (error) {
-            alert("Ошибка при обращении к серверу");
-        }
-    });
-</script>

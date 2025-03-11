@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Services;
 
-public class CurrentProjectServices(ICurrentProjectRepository repository)
+public class CurrentProjectService(ICurrentProjectRepository repository)
 {
     public async Task<Guid> Create(string name)
     {
@@ -39,7 +39,7 @@ public class CurrentProjectServices(ICurrentProjectRepository repository)
     {
         await repository.UpdateAsync(project);
     }
-    
+
     public async Task<List<CurrentProject>> GetAll()
     {
         return await repository.GetAllAsync();
@@ -47,6 +47,8 @@ public class CurrentProjectServices(ICurrentProjectRepository repository)
 
     public async Task ChangeName(Guid id, string name)
     {
+        if (await GetByName(name) is not null)
+            throw new ArgumentException("Такой проект уже существует");
         var project = await GetById(id);
         if (project is null) throw new ArgumentException("Выберите проект");
         project.ChangeName(name);

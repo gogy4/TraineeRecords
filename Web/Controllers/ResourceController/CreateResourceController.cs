@@ -4,11 +4,11 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
 
-public class CreateResourceController(TraineeServices traineeServices) : CreateEditResource(traineeServices)
+public class CreateResourceController(TraineeService traineeService) : CreateEditResource(traineeService)
 {
     public async Task<IActionResult> Index(string resourceType)
     {
-        var trainee = await traineeServices.GetAll();
+        var trainee = await traineeService.GetAll();
         var model = new OperationResourceViewModel(resourceType, TempData["Errors"] as string,
             TempData["Success"] as string, trainee);
         return View(model);

@@ -1,0 +1,76 @@
+﻿<div class="tab-pane fade @(Model.ActiveTab == "projects" ? "show active" : "")" id="projects">
+    <h3>Проекты</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                <a href="@Url.Action("Index", new
+                         {
+                             activeTab = Model.ActiveTab, searchQuery = Model.SearchQuery,
+                             sortOrder = Model.SortOrder == "name" ? "name_desc" : "name",
+                             page = Model.CurrentPage, pageSize = Model.PageSize
+                         })"
+                   class="sort-link" data-sort="name">
+                    Название @(Model.SortOrder == "name" ? "🔽" : Model.SortOrder == "name_desc" ? "🔼" : "")
+                </a>
+            </th>
+            <th>
+                <a href="@Url.Action("Index", new { activeTab = Model.ActiveTab, searchQuery = Model.SearchQuery, sortOrder = Model.SortOrder == "trainees" ? "trainees_desc" : "trainees", page = Model.CurrentPage, pageSize = Model.PageSize })"
+                   class="sort-link" data-sort="trainees">
+                    Кол-во стажеров @(Model.SortOrder == "trainees" ? "🔽" : Model.SortOrder == "trainees_desc" ? "🔼" : "")
+                </a>
+            </th>
+            <th>Стажеры</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var project in Model.Projects)
+        {
+            <tr>
+                <td>@project.Name</td>
+                <td>@project.CountTrainees</td>
+                <td>
+                    <button class="toggle-trainees btn btn-info" data-id="@project.Id">👥 Показать</button>
+                    <ul class="trainees-list" id="trainees-@project.Id" style="display:none;">
+                        @if (Model.TraineesByProject.ContainsKey(project.Id))
+                        {
+                            var i = 1;
+                            foreach (var trainee in Model.TraineesByProject[project.Id])
+                            {
+                                <li>
+                                    Стажер номер @(i) <br/>
+                                    Имя: @trainee.Name <br/>
+                                    Фамилия: @trainee.Surname <br/>
+                                    Почта: @trainee.Email <br/>
+                                    Номер телефона: @(trainee.PhoneNumber ?? "не указан")<br/>
+                                </li>
+
+                                i++;
+                            }
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <a href="@Url.Action("Index", "EditResource", new { resourceId = project.Id, resourceType = "Project" })"
+                       class="btn btn-warning">✏ Изменить</a>
+                </td>
+
+                <td>
+                    <form method="post" action="@Url.Action("Delete", "ResourceList")"
+                          onsubmit="return confirm('Вы уверены, что хотите удалить этот ресурс?');">
+                        <input type="hidden" name="resourceId" value="@project.Id" />
+                        <input type="hidden" name="resourceType" value="Project" />
+                        <input type="hidden" name="activeTab" value="@Model.ActiveTab" />
+                        <input type="hidden" name="searchQuery" value="@Model.SearchQuery" />
+                        <input type="hidden" name="sortOrder" value="@Model.SortOrder" />
+                        <input type="hidden" name="page" value="@Model.CurrentPage" />
+                        <input type="hidden" name="pageSize" value="@Model.PageSize" />
+
+                        <button type="submit" class="btn btn-danger">🗑 Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

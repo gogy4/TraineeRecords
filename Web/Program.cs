@@ -15,10 +15,10 @@ builder.Services.AddScoped<IInternshipDirectionRepository, InternshipDirectionRe
 builder.Services.AddScoped<IRepository<Trainee>, TraineeRepository>();
 builder.Services.AddScoped<IRepository<CurrentProject>, CurrentProjectRepository>();
 builder.Services.AddScoped<IRepository<InternshipDirection>, InternshipDirectionRepository>();
-builder.Services.AddScoped<ResourceServices>();
-builder.Services.AddScoped<TraineeServices>();
-builder.Services.AddScoped<CurrentProjectServices>();
-builder.Services.AddScoped<InternshipDirectionsServices>();
+builder.Services.AddScoped<ResourceService>();
+builder.Services.AddScoped<TraineeService>();
+builder.Services.AddScoped<CurrentProjectService>();
+builder.Services.AddScoped<InternshipDirectionsService>();
 builder.Services.AddScoped<DeleteResourceService>();
 builder.Services.AddScoped<EditResourceNameService>();
 

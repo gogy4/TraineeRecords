@@ -62,16 +62,16 @@
     </div>
 
     <div class="form-group">
-        <label for="currentProject">Текущий проект</label>
-        <select asp-for="Trainee.CurrentProjectName" id="currentProject" class="form-control">
+        <label for="currentProjectName">Текущий проект</label>
+        <select asp-for="Trainee.CurrentProjectName" id="currentProjectName" class="form-control">
             <option value="">Выберите проект</option>
             @foreach (var project in Model.Projects)
             {
                 <option value="@project">@project</option>
             }
         </select>
-        <input type="text" id="newCurrentProject" class="form-control mt-2" placeholder="Добавить новый проект"/>
-        <button type="button" id="addCurrentProject" class="btn btn-success btn-sm mt-1">+</button>
+        <input type="text" id="newCurrentProjectName" class="form-control mt-2" placeholder="Добавить новый проект"/>
+        <button type="button" id="addCurrentProjectName" class="btn btn-success btn-sm mt-1">+</button>
     </div>
 
     <input type="hidden" asp-for="Trainee.Id"/>
@@ -90,34 +90,62 @@
         return response;
     }
 
-    document.getElementById("addInternshipDirection").addEventListener("click", async function () {
-        var newDirection = document.getElementById("newInternshipDirection").value.trim();
+    document.getElementById("addInternshipDirectionName").addEventListener("click", async function () {
+        var newDirection = document.getElementById("newInternshipDirectionName").value.trim();
         if (newDirection) {
             let response = await postData('/CreateNewResource/AddInternshipDirection', newDirection);
-            if (response) {
-                var select = document.getElementById("internshipDirection");
+            if (response.ok) {
+                var select = document.getElementById("internshipDirectionName");
                 var option = document.createElement("option");
                 option.value = newDirection;
                 option.textContent = newDirection;
                 select.appendChild(option);
                 select.value = newDirection;
-                document.getElementById("newInternshipDirection").value = "";
+                document.getElementById("newInternshipDirectionName").value = "";
+            }
+            else {
+                try {
+                    let errorText = await response.text();
+
+                    let match = errorText.match(/System\.ArgumentException: (.+)/);
+                    if (match && match[1]) {
+                        errorText = match[1];
+                    }
+
+                    alert(errorText || "Ошибка при добавлении ресурса");
+                } catch (e) {
+                    alert("Ошибка при обработке ответа сервера");
+                }
             }
         }
     });
 
-    document.getElementById("addCurrentProject").addEventListener("click", async function () {
-        var newProject = document.getElementById("newCurrentProject").value.trim();
+    document.getElementById("addCurrentProjectName").addEventListener("click", async function () {
+        var newProject = document.getElementById("newCurrentProjectName").value.trim();
         if (newProject) {
             let response = await postData('/CreateNewResource/AddCurrentProject', newProject);
-            if (response) {
-                var select = document.getElementById("currentProject");
+            if (response.ok) {
+                var select = document.getElementById("currentProjectName");
                 var option = document.createElement("option");
                 option.value = newProject;
                 option.textContent = newProject;
                 select.appendChild(option);
                 select.value = newProject;
-                document.getElementById("newCurrentProject").value = "";
+                document.getElementById("newCurrentProjectName").value = "";
+            }
+            else {
+                try {
+                    let errorText = await response.text();
+
+                    let match = errorText.match(/System\.ArgumentException: (.+)/);
+                    if (match && match[1]) {
+                        errorText = match[1];
+                    }
+
+                    alert(errorText || "Ошибка при добавлении ресурса");
+                } catch (e) {
+                    alert("Ошибка при обработке ответа сервера");
+                }
             }
         }
     });

@@ -5,12 +5,12 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
 
-public class EditResourceController(TraineeServices traineeServices, EditResourceNameService editResourceNameService) :
-    CreateEditResource(traineeServices)
+public class EditResourceController(TraineeService traineeService, EditResourceNameService editResourceNameService) :
+    CreateEditResource(traineeService)
 {
     public async Task<IActionResult> Index(Guid resourceId, string resourceType)
     {
-        var trainees = await traineeServices.GetTraineeWithoutResource(resourceId, resourceType);
+        var trainees = await traineeService.GetTraineeWithoutResource(resourceId, resourceType);
         var resourceName = await editResourceNameService.GetResourceById(resourceId, resourceType);
         var model = new OperationResourceViewModel(resourceType, TempData["Error"] as string,
             TempData["Success"] as string, trainees, resourceId: resourceId, resourceName: resourceName);

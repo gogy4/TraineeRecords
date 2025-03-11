@@ -4,7 +4,7 @@ using Domain.Entities;
 
 namespace Application.Services;
 
-public class TraineeServices(ITraineeRepository repository, ResourceServices resourceServices)
+public class TraineeService(ITraineeRepository repository, ResourceService resourceService)
 {
     public async Task Create(TraineeDto traineeDto)
     {
@@ -13,8 +13,8 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         if (!result.IsValid)
             throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
 
-        var ids = await resourceServices.GetIds(traineeDto.InternshipDirectionName, traineeDto.CurrentProjectName);
-        await resourceServices.ChangeCountTrainees(null, null, ids.internshipDirectionId, ids.currentProjectId);
+        var ids = await resourceService.GetIds(traineeDto.InternshipDirectionName, traineeDto.CurrentProjectName);
+        await resourceService.ChangeCountTrainees(null, null, ids.internshipDirectionId, ids.currentProjectId);
 
         var trainee = new Trainee(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email,
             traineeDto.PhoneNumber, traineeDto.DateOfBirth, ids.internshipDirectionId, ids.currentProjectId);
@@ -35,7 +35,7 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         var oldIds = (trainee.CurrentProjectId, trainee.InternshipDirectionId);
         var newIds = (traineeDto.CurrentProjectId, traineeDto.InternshipDirectionId);
         if (oldIds != newIds)
-            await resourceServices.ChangeCountTrainees(oldIds.Item2,
+            await resourceService.ChangeCountTrainees(oldIds.Item2,
                 oldIds.Item1, newIds.InternshipDirectionId, newIds.CurrentProjectId);
 
 
@@ -48,7 +48,7 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
 
     public async Task<List<TraineeDto>> GetByFilter(string directionFilter, string currentProjectId)
     {
-        var (projectId, directionId) = await resourceServices.GetIds(directionFilter, currentProjectId);
+        var (projectId, directionId) = await resourceService.GetIds(directionFilter, currentProjectId);
         return (await repository.GetByResourceIds(directionId, projectId))
             .Select(t => new TraineeDto(t))
             .ToList();
@@ -112,7 +112,7 @@ public class TraineeServices(ITraineeRepository repository, ResourceServices res
         Guid traineeId)
     {
         var trainee = await GetById(traineeId);
-        var resourcePropertiesDto = await resourceServices.GetResourceProperties();
+        var resourcePropertiesDto = await resourceService.GetResourceProperties();
         var direction = resourcePropertiesDto.DirectionNames
             .Where(kv => kv.Key == trainee.InternshipDirectionId)
             .Select(kv => kv.Value)

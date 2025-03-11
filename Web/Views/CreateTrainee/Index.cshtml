@@ -4,6 +4,8 @@
     ViewData["Title"] = "Создать нового стажера";
 }
 
+<script src="js/createTrainee.js"></script>
+
 @if (!string.IsNullOrEmpty(Model.Success))
 {
     <div class="alert alert-success">@Model.Success</div>
@@ -83,47 +85,3 @@
 </form>
 
 
-<script>
-    async function postData(url, data) {
-        let response = await fetch(url, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-
-        return response;
-    }
-
-    document.getElementById("addInternshipDirectionName").addEventListener("click", async function () {
-        var newDirection = document.getElementById("newInternshipDirectionName").value.trim();
-        if (newDirection) {
-            let response = await postData('/CreateNewResource/AddInternshipDirection', newDirection);
-            if (response) {
-                var select = document.getElementById("internshipDirectionName");
-                var option = document.createElement("option");
-                option.value = newDirection;
-                option.textContent = newDirection;
-                select.appendChild(option);
-                select.value = newDirection;
-                document.getElementById("newInternshipDirectionName").value = "";
-            }
-        }
-    });
-
-    document.getElementById("addCurrentProjectName").addEventListener("click", async function () {
-        var newProject = document.getElementById("newCurrentProjectName").value.trim();
-        if (newProject) {
-            let response = await postData('/CreateNewResource/AddCurrentProject', newProject);
-            if (response) {
-                var select = document.getElementById("currentProjectName");
-                var option = document.createElement("option");
-                option.value = newProject;
-                option.textContent = newProject;
-                select.appendChild(option);
-                select.value = newProject;
-                document.getElementById("newCurrentProjectName").value = "";
-            }
-        }
-    });
-
-</script>

@@ -4,20 +4,20 @@ using Domain.Entities;
 
 namespace Application.Services;
 
-public class ResourceServices(
-    CurrentProjectServices currentProjectServices,
-    InternshipDirectionsServices internshipDirectionsService)
+public class ResourceService(
+    CurrentProjectService currentProjectService,
+    InternshipDirectionsService internshipDirectionsService)
 {
     public async Task ChangeCountTrainees(Guid? oldInternshipDirectionId, Guid? oldCurrentProjectId,
         Guid? newInternshipDirectionId, Guid? newCurrentProjectId)
     {
         if (oldCurrentProjectId.HasValue && oldCurrentProjectId != newCurrentProjectId)
         {
-            var oldProject = await currentProjectServices.GetById(oldCurrentProjectId.Value);
+            var oldProject = await currentProjectService.GetById(oldCurrentProjectId.Value);
             if (oldProject != null)
             {
                 oldProject.DecreaseTraineeCount();
-                await currentProjectServices.Update(oldProject);
+                await currentProjectService.Update(oldProject);
             }
         }
 
@@ -33,11 +33,11 @@ public class ResourceServices(
 
         if (newCurrentProjectId.HasValue && oldCurrentProjectId != newCurrentProjectId)
         {
-            var newProject = await currentProjectServices.GetById(newCurrentProjectId.Value);
+            var newProject = await currentProjectService.GetById(newCurrentProjectId.Value);
             if (newProject != null)
             {
                 newProject.IncreaseTraineeCount();
-                await currentProjectServices.Update(newProject);
+                await currentProjectService.Update(newProject);
             }
         }
 
@@ -54,7 +54,7 @@ public class ResourceServices(
 
     private async Task<(List<CurrentProjectDto> projects, List<InternshipDirectionDto> directions)> GetAll()
     {
-        var projects = (await currentProjectServices.GetAll())
+        var projects = (await currentProjectService.GetAll())
             .Select(p => new CurrentProjectDto(p))
             .ToList();
         var directions = (await internshipDirectionsService.GetAll())
@@ -66,18 +66,22 @@ public class ResourceServices(
 
     public async Task<Guid> CreateInternshipDirection(string internshipDirectionName)
     {
+        if (await internshipDirectionsService.GetByName(internshipDirectionName) is not null)
+            throw new ArgumentException("Такое направление уже существует");
         return await internshipDirectionsService.Create(internshipDirectionName);
     }
 
     public async Task<Guid> CreateCurrentProject(string projectName)
     {
-        return await currentProjectServices.Create(projectName);
+        if (await currentProjectService.GetByName(projectName) is not null)
+            throw new ArgumentException("Такой проект уже существует");
+        return await currentProjectService.Create(projectName);
     }
 
     public async Task<(Guid currentProjectId, Guid internshipDirectionId)> GetIds(string internshipDirectionName,
         string currentProjectName)
     {
-        var project = await currentProjectServices.GetByName(currentProjectName);
+        var project = await currentProjectService.GetByName(currentProjectName);
         var internshipDirection = await internshipDirectionsService.GetByName(internshipDirectionName);
         var projectId = project is null ? Guid.Empty : project.Id;
         var internshipDirectionId = internshipDirection is null ? Guid.Empty : internshipDirection.Id;
@@ -113,7 +117,7 @@ public class ResourceServices(
     public async Task<ResourceResultPageDto> GetFilteredSortedPaged(
         string searchQuery, string sortOrder, int page, int pageSize)
     {
-        var projects = (await currentProjectServices.GetByFilter(searchQuery))
+        var projects = (await currentProjectService.GetByFilter(searchQuery))
             .Select(p => new CurrentProjectDto(p))
             .ToList();
         var directions = (await internshipDirectionsService.GetByFilter(searchQuery))
@@ -138,12 +142,17 @@ public class ResourceServices(
         var (projects, directions) = await GetAll();
         var directionsName = new Dictionary<Guid, string>();
         var projectsName = new Dictionary<Guid, string>();
-        foreach (var project in projects.Where(p=>p.Name==projectFilter || projectFilter==null)) 
+        foreach (var project in projects.Where(p => p.Name == projectFilter || projectFilter == null))
             projectsName[project.Id] = project.Name;
-        foreach (var direction in directions.Where(p=>p.Name==dirFilter || dirFilter==null)) 
+        foreach (var direction in directions.Where(p => p.Name == dirFilter || dirFilter == null))
             directionsName[direction.Id] = direction.Name;
         var modelDto = new ResourcePropertiesDto(projects, directions, projectsName, directionsName);
         return modelDto;
     }
-    
+
+    private async Task<bool> ResourceExists(string directionName = null, string projectName = null)
+    {
+        if (directionName is not null) return await internshipDirectionsService.GetByName(directionName) is null;
+        return await currentProjectService.GetByName(projectName) is null;
+    }
 }
