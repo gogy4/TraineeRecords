@@ -11,7 +11,7 @@ public class ResourceService(
     public async Task ChangeCountTrainees(Guid? oldInternshipDirectionId, Guid? oldCurrentProjectId,
         Guid? newInternshipDirectionId, Guid? newCurrentProjectId)
     {
-        if (oldCurrentProjectId.HasValue && oldCurrentProjectId != newCurrentProjectId)
+        if (oldCurrentProjectId.HasValue && oldCurrentProjectId != newCurrentProjectId && newCurrentProjectId.HasValue)
         {
             var oldProject = await currentProjectService.GetById(oldCurrentProjectId.Value);
             if (oldProject != null)
@@ -21,7 +21,7 @@ public class ResourceService(
             }
         }
 
-        if (oldInternshipDirectionId.HasValue && oldInternshipDirectionId != newInternshipDirectionId)
+        if (oldInternshipDirectionId.HasValue && oldInternshipDirectionId != newInternshipDirectionId && newInternshipDirectionId.HasValue)
         {
             var oldDirection = await internshipDirectionsService.GetById(oldInternshipDirectionId.Value);
             if (oldDirection != null)
@@ -78,15 +78,18 @@ public class ResourceService(
         return await currentProjectService.Create(projectName);
     }
 
-    public async Task<(Guid currentProjectId, Guid internshipDirectionId)> GetIds(string internshipDirectionName,
+    public async Task<(Guid? CurrentProjectId, Guid? InternshipDirectionId)> GetIds(string internshipDirectionName,
         string currentProjectName)
     {
         var project = await currentProjectService.GetByName(currentProjectName);
         var internshipDirection = await internshipDirectionsService.GetByName(internshipDirectionName);
-        var projectId = project is null ? Guid.Empty : project.Id;
-        var internshipDirectionId = internshipDirection is null ? Guid.Empty : internshipDirection.Id;
+    
+        var projectId = project?.Id;
+        var internshipDirectionId = internshipDirection?.Id;
+    
         return (projectId, internshipDirectionId);
     }
+
 
     private async Task<(List<CurrentProjectDto> projects, List<InternshipDirectionDto> directions)> Sort(
         string sortOrder, List<CurrentProjectDto> projects, List<InternshipDirectionDto> directions)

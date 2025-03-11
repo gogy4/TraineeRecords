@@ -14,10 +14,11 @@ public class TraineeService(ITraineeRepository repository, ResourceService resou
             throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
 
         var ids = await resourceService.GetIds(traineeDto.InternshipDirectionName, traineeDto.CurrentProjectName);
-        await resourceService.ChangeCountTrainees(null, null, ids.internshipDirectionId, ids.currentProjectId);
+        await resourceService.ChangeCountTrainees(null, null, ids.InternshipDirectionId, ids.CurrentProjectId);
 
         var trainee = new Trainee(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email,
-            traineeDto.PhoneNumber, traineeDto.DateOfBirth, ids.internshipDirectionId, ids.currentProjectId);
+            traineeDto.PhoneNumber, traineeDto.DateOfBirth, ids.InternshipDirectionId ?? Guid.Empty,
+            ids.CurrentProjectId ?? Guid.Empty);
 
         await repository.AddAsync(trainee);
     }
@@ -33,14 +34,15 @@ public class TraineeService(ITraineeRepository repository, ResourceService resou
             throw new ArgumentException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
         var trainee = await GetById(traineeDto.Id);
         var oldIds = (trainee.CurrentProjectId, trainee.InternshipDirectionId);
-        var newIds = (traineeDto.CurrentProjectId, traineeDto.InternshipDirectionId);
+        var newIds = await resourceService.GetIds(traineeDto.InternshipDirectionName, traineeDto.CurrentProjectName);
         if (oldIds != newIds)
-            await resourceService.ChangeCountTrainees(oldIds.Item2,
-                oldIds.Item1, newIds.InternshipDirectionId, newIds.CurrentProjectId);
+            await resourceService.ChangeCountTrainees(oldIds.InternshipDirectionId,
+                oldIds.CurrentProjectId, newIds.InternshipDirectionId, newIds.CurrentProjectId);
 
-
+        var a = newIds.InternshipDirectionId ?? Guid.Empty;
+        var d = newIds.CurrentProjectId ?? Guid.Empty;
         trainee.Edit(traineeDto.Name, traineeDto.Surname, traineeDto.Gender, traineeDto.Email, traineeDto.PhoneNumber,
-            traineeDto.DateOfBirth, newIds.InternshipDirectionId, newIds.CurrentProjectId);
+            traineeDto.DateOfBirth, newIds.InternshipDirectionId ?? Guid.Empty, newIds.CurrentProjectId ?? Guid.Empty);
 
         await repository.UpdateAsync(trainee);
     }

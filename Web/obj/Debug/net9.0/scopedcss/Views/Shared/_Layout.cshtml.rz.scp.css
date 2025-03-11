@@ -1,0 +1,123 @@
+body[b-lzldzk1rll] {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+    padding-bottom: 80px;
+}
+
+a.navbar-brand[b-lzldzk1rll] {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+a[b-lzldzk1rll] {
+    color: #0077cc;
+}
+
+.btn-primary[b-lzldzk1rll] {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.btn-primary:focus[b-lzldzk1rll], .btn-primary:active:focus[b-lzldzk1rll] {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.nav-pills .nav-link.active[b-lzldzk1rll], .nav-pills .show > .nav-link[b-lzldzk1rll] {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.border-top[b-lzldzk1rll] {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom[b-lzldzk1rll] {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow[b-lzldzk1rll] {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy[b-lzldzk1rll] {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+footer[b-lzldzk1rll] {
+    width: 100%;
+    line-height: 60px;
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: auto;
+}
+
+
+
+html[b-lzldzk1rll] {
+    min-height: 100%;
+    position: relative;
+    font-size: 14px;
+
+}
+
+.form-floating > .form-control-plaintext[b-lzldzk1rll]::placeholder, .form-floating > .form-control[b-lzldzk1rll]::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus[b-lzldzk1rll]::placeholder, .form-floating > .form-control:focus[b-lzldzk1rll]::placeholder {
+    text-align: start;
+}
+
+.btn:focus[b-lzldzk1rll], .btn:active:focus[b-lzldzk1rll], .btn-link.nav-link:focus[b-lzldzk1rll], .form-control:focus[b-lzldzk1rll], .form-check-input:focus[b-lzldzk1rll] {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+
+
+@media (min-width: 768px) {
+    html[b-lzldzk1rll] {
+        font-size: 16px;
+    }
+}
+
+.btn-primary[b-lzldzk1rll] {
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+    color: #fff !important;
+}
+
+.btn-secondary[b-lzldzk1rll] {
+    background-color: #6c757d;
+}
+
+.btn-success[b-lzldzk1rll] {
+    background-color: #28a745;
+    color: #fff !important;
+}
+
+.navbar-nav .nav-link[b-lzldzk1rll],
+.navbar-brand[b-lzldzk1rll] {
+    color: white !important;
+}
+
+.btn[b-lzldzk1rll] {
+    color: white !important;
+}
+
+.navbar[b-lzldzk1rll] {
+    background-color: #343a40 !important;
+}
+
+html[b-lzldzk1rll], body[b-lzldzk1rll] {
+    height: 100%;
+}

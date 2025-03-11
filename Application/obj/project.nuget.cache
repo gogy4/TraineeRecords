@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "vAadAlkmx+s=",
+  "success": true,
+  "projectFilePath": "D:\\Rider Projects\\WebApplication1\\Application\\Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dan4i\\.nuget\\packages\\fluentvalidation\\12.0.0-preview1\\fluentvalidation.12.0.0-preview1.nupkg.sha512",
+    "C:\\Users\\dan4i\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.2\\microsoft.extensions.dependencyinjection.abstractions.9.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
