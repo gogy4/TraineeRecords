@@ -13,4 +13,4 @@ docker-compose up -d (-d для того, чтобы можно было пол�
 
 ИЛИ
 
-docker-compose --build -d
+docker-compose up --build -d
