@@ -9,3 +9,7 @@ dump.sql удалил, потому что вызывалась ошибка, и
 docker-compose build
 
 docker-compose up -d (-d для того, чтобы можно было пользоваться консолью)
+
+ИЛИ
+
+docker-compose --build -d
