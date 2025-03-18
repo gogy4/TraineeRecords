@@ -1,0 +1,26 @@
+﻿
+services:
+  db:
+    image: mysql:8.0
+    container_name: trainee_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 7853
+      MYSQL_DATABASE: 66bit
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    container_name: trainee_app
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Database=66bit;User=root;Password=7853;
+    ports:
+      - "5000:5000"
+
+volumes:
+  db_data:

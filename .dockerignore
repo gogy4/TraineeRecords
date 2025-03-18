@@ -1,0 +1,10 @@
+﻿.git/
+.idea/
+bin/
+obj/
+node_modules/
+logs/
+*.log
+*.exe
+*.dll
+.env
